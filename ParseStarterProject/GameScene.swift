@@ -22,7 +22,8 @@ class GameScene: SKScene {
     var background: SKSpriteNode!
     
     var selectedNode: SKSpriteNode? = SKSpriteNode()
-    
+    var startedPosition: CGPoint?
+    var movementEnable = false
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
@@ -130,7 +131,7 @@ class GameScene: SKScene {
         let y = point.y
         let column: Int = Int(x / TileWidth)
         let row: Int = Int(y / TileHeight)
-        if column >= 0 && row >= 0 && column < colNumber && row < rowNumber{
+        if column >= 0 && row >= 0 && column < colNumber && row < rowNumber && x >= 0 && y >= 0{
             return (column, row, true)
         }
         return (column, row, false)
@@ -138,8 +139,10 @@ class GameScene: SKScene {
     
     func columnForPointInHand(point: CGPoint) ->(column: Int, isInHand: Bool){
         let x = point.x
+        let y = point.y
         let column: Int = Int(x / TileWidth)
-        if column >= 0 && column <= 6{
+        let row: Int = Int(y / TileHeight)
+        if column >= 0 && column <= 6 && x >= 0 && y >= 0 && row == 0{
             return (column, true)
         }
         return (column, false)
@@ -154,45 +157,54 @@ class GameScene: SKScene {
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        for touch in touches {
-            let touch = touch as! UITouch
-            
-            let locationInGameBoard = touch.locationInNode(figuresLayer)
-            let coordinate = coordinateForPointInGameBoard(locationInGameBoard)
-            println(locationInGameBoard)
-            if coordinate.isInGameBoard{
-                selectedNode!.removeFromParent()
-                figuresLayer.addChild(selectedNode!)
-                selectedNode!.position = pointForColumn(coordinate.column, row: coordinate.row)
-            }
-            else{
-                let coordinateInHand = columnForPointInHand(touch.locationInNode(handLayer))
-                if coordinateInHand.isInHand{
+        if movementEnable{
+            for touch in touches {
+                let touch = touch as! UITouch
+                
+                let locationInGameBoard = touch.locationInNode(figuresLayer)
+                let coordinate = coordinateForPointInGameBoard(locationInGameBoard)
+                //DROP ON GAMEBOARD
+                if coordinate.isInGameBoard{
                     selectedNode!.removeFromParent()
-                    handLayer.addChild(selectedNode!)
-                    selectedNode!.position = pointForHand(coordinateInHand.column)
+                    figuresLayer.addChild(selectedNode!)
+                    selectedNode!.position = pointForColumn(coordinate.column, row: coordinate.row)
                 }
+                else{
+                    let coordinateInHand = columnForPointInHand(touch.locationInNode(handLayer))
+                    //DROP ON HAND LAYER
+                    if coordinateInHand.isInHand{
+                        selectedNode!.removeFromParent()
+                        handLayer.addChild(selectedNode!)
+                        selectedNode!.position = pointForHand(coordinateInHand.column)
+                    }
+                        //DROP ELSEWHERE
+                    else{
+                        selectedNode!.position = startedPosition!
+                    }
+                }
+                selectedNode!.zPosition = 0
+                
+                let dropDown = SKAction.scaleTo(1.0, duration: 0.2)
+                selectedNode!.runAction(dropDown, withKey: "drop")
+                selectedNode = nil
+                movementEnable = false
             }
-            selectedNode!.zPosition = 0
-            
-            let dropDown = SKAction.scaleTo(1.0, duration: 0.2)
-            selectedNode!.runAction(dropDown, withKey: "drop")
-            selectedNode = nil
         }
-        
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        for touch in touches {
-            let touch = touch as! UITouch
-            let positionInScene = touch.locationInNode(self)
-            let touchedNode = nodeAtPoint(positionInScene)
-            if let name = touchedNode.name{
-                if name == "figure"{
-                    let previousPosition = touch.previousLocationInNode(self)
-                    let translation = CGPoint(x: positionInScene.x - previousPosition.x, y: positionInScene.y - previousPosition.y)
-                    
-                    panForTranslation(translation)
+        if movementEnable{
+            for touch in touches {
+                let touch = touch as! UITouch
+                let positionInScene = touch.locationInNode(self)
+                let touchedNode = nodeAtPoint(positionInScene)
+                if let name = touchedNode.name{
+                    if name == "figure"{
+                        let previousPosition = touch.previousLocationInNode(self)
+                        let translation = CGPoint(x: positionInScene.x - previousPosition.x, y: positionInScene.y - previousPosition.y)
+                        
+                        panForTranslation(translation)
+                    }
                 }
             }
         }
@@ -224,12 +236,14 @@ class GameScene: SKScene {
         if touchedNode is SKSpriteNode {
             if let name = touchedNode.name{
                 if touchedNode.name! == "figure" {
-                selectedNode = touchedNode as! SKSpriteNode
-                        selectedNode!.removeAllActions()
-                        
-                        let liftUp = SKAction.scaleTo(1.2, duration: 0.2)
-                        selectedNode!.runAction(liftUp, withKey: "pickup")
-                        //DO STUFF
+                    movementEnable = true
+                    selectedNode = touchedNode as! SKSpriteNode
+                    selectedNode!.removeAllActions()
+                    startedPosition = selectedNode!.position
+                    
+                    let liftUp = SKAction.scaleTo(1.5, duration: 0.2)
+                    selectedNode!.runAction(liftUp, withKey: "pickup")
+                    //DO STUFF
                 }
             }
         }
