@@ -46,7 +46,8 @@ class GameViewController: UIViewController {
         scene.gameBoard = gameBoard
         scene.addTiles()
         scene.addSpritesForFigures(gameBoard.figuresArray)
-        scene.addSpritesForHand(gameBoard.hand)
+        scene.addFiguresForHand(gameBoard.hand)
+        scene.addTilesForHand(gameBoard.hand)
     }
     
     override func shouldAutorotate() -> Bool {
@@ -68,5 +69,10 @@ class GameViewController: UIViewController {
     
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+    @IBAction func redrawBoard(sender: UIButton) {
+        scene.redrawBoard()
+        scene.addSpritesForFigures(gameBoard.figuresArray)
+        scene.addFiguresForHand(gameBoard.hand)
     }
 }
