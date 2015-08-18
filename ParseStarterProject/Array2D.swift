@@ -19,7 +19,7 @@ struct Array2D<T> {
         array = Array<T?>(count: rows*columns, repeatedValue: nil)
     }
     
-    subscript(row: Int, column: Int) -> T? {
+    subscript(column: Int, row: Int) -> T? {
         get {
             return array[row*columns + column]
         }

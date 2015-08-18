@@ -47,7 +47,7 @@ class GameViewController: UIViewController {
         scene.addTiles()
         scene.addSpritesForFigures(gameBoard.figuresArray)
         scene.addFiguresForHand(gameBoard.hand)
-        scene.addTilesForHand(gameBoard.hand)
+        scene.addTilesForHand()
     }
     
     override func shouldAutorotate() -> Bool {

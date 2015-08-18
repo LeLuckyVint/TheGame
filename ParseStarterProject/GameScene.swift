@@ -22,6 +22,9 @@ class GameScene: SKScene {
     var background: SKSpriteNode!
     
     var selectedNode: SKSpriteNode? = SKSpriteNode()
+    var selectedFigure: Figure?
+    var isFromGameBoard = false
+    var isFromHand = false
     var startedPosition: CGPoint?
     var movementEnable = false
     required init?(coder aDecoder: NSCoder) {
@@ -41,7 +44,7 @@ class GameScene: SKScene {
         
         let h = TileHeight * CGFloat(rowNumber)
         let w = TileWidth * CGFloat(colNumber)
-        let handWidth = CGFloat(TileWidth) * 7
+        let handWidth = TileWidth * CGFloat(handNumber)
         let layerPosition = CGPoint(x: -w/2, y: -(h - self.size.height/2 + 10))
         let handPosition = CGPoint(x: -handWidth/2, y: -(h - self.size.height/2 + 20 + TileHeight))
         
@@ -70,7 +73,7 @@ class GameScene: SKScene {
                     sprite.anchorPoint = CGPointZero
                     sprite.name = "figure"
                     sprite.size = CGSize(width: TileWidth, height: TileHeight)
-                    sprite.position = pointForColumn(figure!.column!, row:figure!.row!)
+                    sprite.position = pointForColumn(column, row:row)
                     figuresLayer.addChild(sprite)
                     figure!.sprite = sprite
                 }
@@ -92,22 +95,24 @@ class GameScene: SKScene {
         }
     }
     
-    func addFiguresForHand(hand: [Figure]){
+    func addFiguresForHand(hand: [Figure?]){
         for index in 0..<hand.count{
             let figure = hand[index]
-            let sprite = SKSpriteNode(imageNamed: figure.toString)
-            sprite.name = "figure"
-            sprite.anchorPoint = CGPointZero
-            sprite.size = CGSize(width: TileWidth, height: TileHeight)
-            sprite.position = pointForHand(index)
-            handLayer.addChild(sprite)
-            
-            figure.sprite = sprite
+            if figure != nil{
+                let sprite = SKSpriteNode(imageNamed: figure!.toString)
+                sprite.name = "figure"
+                sprite.anchorPoint = CGPointZero
+                sprite.size = CGSize(width: TileWidth, height: TileHeight)
+                sprite.position = pointForHand(index)
+                handLayer.addChild(sprite)
+                
+                figure!.sprite = sprite
+            }
         }
     }
     
-    func addTilesForHand(hand: [Figure]){
-        for index in 0..<hand.count{
+    func addTilesForHand(){
+        for index in 0..<handNumber{
             
             let tileNode = SKSpriteNode(imageNamed: "Tile")
             tileNode.name = "tile"
@@ -132,6 +137,13 @@ class GameScene: SKScene {
     
     func isPlaceAtGameBoardEmpty(column: Int, row: Int) -> Bool{
         if gameBoard.figureAtColumn(column, row: row) == nil{
+            return true
+        }
+        return false
+    }
+    
+    func isPlaceAtHandEmpty(column: Int) -> Bool{
+        if gameBoard.hand[column] == nil{
             return true
         }
         return false
@@ -163,7 +175,41 @@ class GameScene: SKScene {
         for touch in touches {
             let touch = touch as! UITouch
             let positionInScene = touch.locationInNode(self)
-            selectNodeForTouch(positionInScene)
+            let positionInGameBoard = touch.locationInNode(figuresLayer)
+            let positionInHand = touch.locationInNode(handLayer)
+            
+            selectNodeForTouch(positionInScene, gameboardLocation: positionInGameBoard, handLocation: positionInHand)
+        }
+    }
+    func selectNodeForTouch(touchLocation: CGPoint, gameboardLocation: CGPoint, handLocation: CGPoint) {
+        let touchedNode = self.nodeAtPoint(touchLocation)
+        
+        if touchedNode is SKSpriteNode {
+            if let name = touchedNode.name{
+                if touchedNode.name! == "figure" {
+                    let coordinate = coordinateForPointInGameBoard(gameboardLocation)
+                    if coordinate.isInGameBoard{
+                        self.isFromGameBoard = true
+                        self.isFromHand = false
+                        
+                    }
+                    else{
+                        let coordinateHand = columnForPointInHand(handLocation)
+                        if coordinateHand.isInHand{
+                            self.isFromHand = true
+                            self.isFromGameBoard = false
+                        }
+                    }
+                    movementEnable = true
+                    selectedNode = (touchedNode as! SKSpriteNode)
+                    selectedNode!.removeAllActions()
+                    
+                    startedPosition = selectedNode!.position
+                    let liftUp = SKAction.scaleTo(1.5, duration: 0.2)
+                    selectedNode!.runAction(liftUp, withKey: "pickup")
+                    //DO STUFF
+                }
+            }
         }
     }
     
@@ -178,7 +224,21 @@ class GameScene: SKScene {
                 if coordinate.isInGameBoard{
                     //PLACE IS EMPTY
                     if isPlaceAtGameBoardEmpty(coordinate.column, row: coordinate.row){
-                        //gameBoard.figureAtColumn(coordinate.column, row: coordinate.row) =
+                        //Figure from gameboard
+                        if isFromGameBoard{
+                            let figureToRemovePosition = coordinateForPointInGameBoard(startedPosition!)
+                            selectedFigure = gameBoard.figureAtColumn(figureToRemovePosition.column, row: figureToRemovePosition.row)
+                            gameBoard.setFigureAtColumn(coordinate.column, row: coordinate.row, figure: selectedFigure)
+                            gameBoard.setFigureAtColumn(figureToRemovePosition.column, row: figureToRemovePosition.row, figure: nil)
+                        }
+                            //figure from hand
+                        else{
+                            let figureToRemovePosition = columnForPointInHand(startedPosition!)
+                            selectedFigure = gameBoard.hand[figureToRemovePosition.column]
+                            
+                            gameBoard.setFigureAtColumn(coordinate.column, row: coordinate.row, figure: selectedFigure)
+                            gameBoard.hand[figureToRemovePosition.column] = nil
+                        }
                         selectedNode!.removeFromParent()
                         figuresLayer.addChild(selectedNode!)
                         selectedNode!.position = pointForColumn(coordinate.column, row: coordinate.row)
@@ -192,9 +252,24 @@ class GameScene: SKScene {
                     let coordinateInHand = columnForPointInHand(touch.locationInNode(handLayer))
                     //DROP ON HAND LAYER
                     if coordinateInHand.isInHand{
-                        selectedNode!.removeFromParent()
-                        handLayer.addChild(selectedNode!)
-                        selectedNode!.position = pointForHand(coordinateInHand.column)
+                        if isPlaceAtHandEmpty(coordinateInHand.column){
+                            if isFromHand{
+                                let figureToRemovePosition = columnForPointInHand(startedPosition!)
+                                selectedFigure = gameBoard.hand[figureToRemovePosition.column]
+                                gameBoard.hand[coordinateInHand.column] = selectedFigure
+                                gameBoard.hand[figureToRemovePosition.column] = nil
+                                
+                                selectedNode!.removeFromParent()
+                                handLayer.addChild(selectedNode!)
+                                selectedNode!.position = pointForHand(coordinateInHand.column)
+                            }
+                            else{
+                                selectedNode!.position = startedPosition!
+                            }
+                        }
+                        else{
+                            selectedNode!.position = startedPosition!
+                        }
                     }
                         //DROP ELSEWHERE
                     else{
@@ -229,16 +304,6 @@ class GameScene: SKScene {
         }
     }
     
-    func boundLayerPos(aNewPosition: CGPoint) -> CGPoint {
-        let winSize = self.size
-        var retval = aNewPosition
-        retval.x = CGFloat(min(retval.x, 0))
-        retval.x = CGFloat(max(retval.x, -(background.size.width) + winSize.width))
-        retval.y = self.position.y
-        
-        return retval
-    }
-    
     func panForTranslation(translation: CGPoint) {
         let position = selectedNode!.position
         
@@ -246,24 +311,6 @@ class GameScene: SKScene {
             if  name == "figure"{
                 selectedNode!.position = CGPoint(x: position.x + translation.x, y: position.y + translation.y)
                 selectedNode?.zPosition = 1
-            }
-        }
-    }
-    func selectNodeForTouch(touchLocation: CGPoint) {
-        let touchedNode = self.nodeAtPoint(touchLocation)
-        
-        if touchedNode is SKSpriteNode {
-            if let name = touchedNode.name{
-                if touchedNode.name! == "figure" {
-                    movementEnable = true
-                    selectedNode = (touchedNode as! SKSpriteNode)
-                    selectedNode!.removeAllActions()
-                    
-                    startedPosition = selectedNode!.position
-                    let liftUp = SKAction.scaleTo(1.5, duration: 0.2)
-                    selectedNode!.runAction(liftUp, withKey: "pickup")
-                    //DO STUFF
-                }
             }
         }
     }
