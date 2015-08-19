@@ -136,7 +136,7 @@ class GameScene: SKScene {
     }
     
     func isPlaceAtGameBoardEmpty(column: Int, row: Int) -> Bool{
-        if gameBoard.figureAtColumn(column, row: row) == nil{
+        if gameBoard.figureAtColumn(column, row: row) == nil && gameBoard.currentMoveFiguresArray[column, row] == nil{
             return true
         }
         return false
@@ -154,6 +154,7 @@ class GameScene: SKScene {
         let y = point.y
         let column: Int = Int(x / TileWidth)
         let row: Int = Int(y / TileHeight)
+        
         if column >= 0 && row >= 0 && column < colNumber && row < rowNumber && x >= 0 && y >= 0{
             return (column, row, true)
         }
@@ -169,6 +170,13 @@ class GameScene: SKScene {
             return (column, true)
         }
         return (column, false)
+    }
+    
+    func isFigureFromCurrentMove(column: Int, row: Int) -> Bool{
+        if gameBoard.currentMoveFiguresArray[column, row] != nil{
+            return true
+        }
+        return false
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -188,9 +196,17 @@ class GameScene: SKScene {
             if let name = touchedNode.name{
                 if touchedNode.name! == "figure" {
                     let coordinate = coordinateForPointInGameBoard(gameboardLocation)
-                    if coordinate.isInGameBoard{
+                    if coordinate.isInGameBoard && isFigureFromCurrentMove(coordinate.column, row: coordinate.row){
                         self.isFromGameBoard = true
                         self.isFromHand = false
+                        movementEnable = true
+                        selectedNode = (touchedNode as! SKSpriteNode)
+                        selectedNode!.removeAllActions()
+                        
+                        startedPosition = selectedNode!.position
+                        let liftUp = SKAction.scaleTo(1.5, duration: 0.2)
+                        selectedNode!.runAction(liftUp, withKey: "pickup")
+                        //DO STUFF
                         
                     }
                     else{
@@ -198,16 +214,17 @@ class GameScene: SKScene {
                         if coordinateHand.isInHand{
                             self.isFromHand = true
                             self.isFromGameBoard = false
+                            movementEnable = true
+                            selectedNode = (touchedNode as! SKSpriteNode)
+                            selectedNode!.removeAllActions()
+                            
+                            startedPosition = selectedNode!.position
+                            let liftUp = SKAction.scaleTo(1.5, duration: 0.2)
+                            selectedNode!.runAction(liftUp, withKey: "pickup")
+                            //DO STUFF
                         }
                     }
-                    movementEnable = true
-                    selectedNode = (touchedNode as! SKSpriteNode)
-                    selectedNode!.removeAllActions()
-                    
-                    startedPosition = selectedNode!.position
-                    let liftUp = SKAction.scaleTo(1.5, duration: 0.2)
-                    selectedNode!.runAction(liftUp, withKey: "pickup")
-                    //DO STUFF
+
                 }
             }
         }
@@ -227,16 +244,16 @@ class GameScene: SKScene {
                         //Figure from gameboard
                         if isFromGameBoard{
                             let figureToRemovePosition = coordinateForPointInGameBoard(startedPosition!)
-                            selectedFigure = gameBoard.figureAtColumn(figureToRemovePosition.column, row: figureToRemovePosition.row)
-                            gameBoard.setFigureAtColumn(coordinate.column, row: coordinate.row, figure: selectedFigure)
-                            gameBoard.setFigureAtColumn(figureToRemovePosition.column, row: figureToRemovePosition.row, figure: nil)
+                            selectedFigure = gameBoard.currentMoveFiguresArray[figureToRemovePosition.column, figureToRemovePosition.row]
+                            gameBoard.currentMoveFiguresArray[coordinate.column, coordinate.row] = selectedFigure
+                            gameBoard.currentMoveFiguresArray[figureToRemovePosition.column, figureToRemovePosition.row] = nil
                         }
                             //figure from hand
                         else{
                             let figureToRemovePosition = columnForPointInHand(startedPosition!)
                             selectedFigure = gameBoard.hand[figureToRemovePosition.column]
                             
-                            gameBoard.setFigureAtColumn(coordinate.column, row: coordinate.row, figure: selectedFigure)
+                            gameBoard.currentMoveFiguresArray[coordinate.column, coordinate.row] = selectedFigure
                             gameBoard.hand[figureToRemovePosition.column] = nil
                         }
                         selectedNode!.removeFromParent()
@@ -263,8 +280,15 @@ class GameScene: SKScene {
                                 handLayer.addChild(selectedNode!)
                                 selectedNode!.position = pointForHand(coordinateInHand.column)
                             }
-                            else{
-                                selectedNode!.position = startedPosition!
+                            else if isFromGameBoard{
+                                let figureToRemovePosition = coordinateForPointInGameBoard(startedPosition!)
+                                selectedFigure = gameBoard.currentMoveFiguresArray[figureToRemovePosition.column, figureToRemovePosition.row]
+                                gameBoard.hand[coordinateInHand.column] = selectedFigure
+                                gameBoard.currentMoveFiguresArray[figureToRemovePosition.column, figureToRemovePosition.row] = nil
+                                
+                                selectedNode!.removeFromParent()
+                                handLayer.addChild(selectedNode!)
+                                selectedNode!.position = pointForHand(coordinateInHand.column)
                             }
                         }
                         else{
@@ -318,5 +342,23 @@ class GameScene: SKScene {
     func redrawBoard(){
         figuresLayer.removeAllChildren()
         handLayer.removeAllChildren()
+    }
+    
+    func commitMove(){
+        addFiguresToGeneralArray()
+        gameBoard.moveHandFiguresToRight()
+        gameBoard.takeFiguresToHand()
+    }
+    
+    func addFiguresToGeneralArray(){
+        for row in 0..<rowNumber {
+            for column in 0..<colNumber {
+                let figure = gameBoard.currentMoveFiguresArray[column, row]
+                if figure != nil{
+                    gameBoard.setFigureAtColumn(column, row: row, figure: figure)
+                }
+            }
+        }
+        gameBoard.clearCurrentMoveArray()
     }
 }

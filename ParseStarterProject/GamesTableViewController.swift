@@ -14,7 +14,7 @@ class GamesTableViewController: UITableViewController {
     
     let defaults = NSUserDefaults.standardUserDefaults()
     
-    let games = [GameType.PUZZLE]
+    let games = [GameType.PUZZLE, GameType.PUZZLE]
     let reachability = Reachability.reachabilityForInternetConnection()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,6 @@ class GamesTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if reachability.isReachable(){
             let selectedCell = tableView.dequeueReusableCellWithIdentifier("gameCell", forIndexPath: indexPath) as! GameTableViewCell
-            selectedCell.type = games[indexPath.row]
             self.performSegueWithIdentifier("showFriends", sender: selectedCell)
         }
         else{

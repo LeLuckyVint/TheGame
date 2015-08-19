@@ -20,22 +20,6 @@ class ServerCommunicator {
     static let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     static let jsonParser = JSONParser.sharedInstance
     
-    static func createInvite(userId: Int, type: String, token: String){
-        let url = "https://www.play-like.me/API/rest/room/"
-        let parameters = ["users": [userId], "type": type, "playersNumber": 2] as [String : AnyObject]
-        let headers = [
-            "Content-Type": "application/json",
-            "Authorization": token
-        ]
-        
-        Alamofire.request(.POST, url, parameters: parameters, encoding: .JSON, headers: headers)
-            .response { request, response, json, _ in
-                if (response?.statusCode == 200){
-                    
-                }
-                println(response?.statusCode)
-        }
-    }
     
     static func login(username: String, password: String){
         let installationId = appDelegate.installation!.objectId!
@@ -94,7 +78,8 @@ class ServerCommunicator {
                 println(response?.statusCode)
         }
     }
-    static func getProfile(token: String){
+    static func getProfile(){
+        let token = defaults.stringForKey("token")!
         let profileURL = "https://www.play-like.me/API/rest/profile"
         let profileHeaders = [
             "Content-Type": "application/json",
@@ -106,7 +91,9 @@ class ServerCommunicator {
         }
     }
     
-    static func getRooms(token: String)-> [Room]?{
+    //ROOMS METHODS
+    static func getRooms(completionHandler: (rooms: [Room]?, success: Bool)->Void){
+        let token = defaults.stringForKey("token")!
         let url = "https://www.play-like.me/API/rest/rooms"
         let headers = [
             "Content-Type": "application/json",
@@ -117,17 +104,38 @@ class ServerCommunicator {
             if (response?.statusCode == 200){
                 let jsonObject = JSON(json!)
                 rooms = self.jsonParser.getRooms(jsonObject)
+                completionHandler(rooms: rooms, success: true)
             }
             else {
-                rooms = nil
+                completionHandler(rooms: nil, success: false)
             }
         }
-        return rooms
+    }
+    
+    //TODO
+    static func createRoom(userId: Int, type: String, completionHandler: (success: Bool)->Void){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/rooms"
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": token
+        ]
+        let parameters = ["users":[userId], "type": type, "playersNumber": 2] as [String : AnyObject]
+        var rooms: [Room]?
+        Alamofire.request(.POST, url,parameters: parameters, encoding: .JSON, headers: headers).responseJSON { request, response, json, _ in
+            if (response?.statusCode == 200){
+                
+            }
+            else {
+                
+            }
+        }
     }
     
     // FRIENDS METHODS
-    static func getFriendsList(token: String) -> [User]?{
-        let url = "https://www.play-like.me/API/rest/friend/friends"
+    static func getFriendsList(completionHandler: (friends: [User]?, success: Bool)->Void){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/friends"
         let headers = [
             "Content-Type": "application/json",
             "Authorization": token
@@ -137,16 +145,17 @@ class ServerCommunicator {
             if (response?.statusCode == 200){
                 let jsonObject = JSON(json!)
                 friends = self.jsonParser.getFriends(jsonObject)
+                completionHandler(friends: friends, success: true)
             }
             else {
-                friends = nil
+                completionHandler(friends: [], success: false)
             }
         }
-        return friends
     }
     
-    static func getInvitesFriendsList(token: String) -> [Invite]?{
-        let url = "https://www.play-like.me/API/rest/friend/friends"
+    static func getInvitesFriendsList(completionHandler: (invites: [Invite]?, success: Bool)->Void){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/friends/invites"
         let headers = [
             "Content-Type": "application/json",
             "Authorization": token
@@ -156,16 +165,17 @@ class ServerCommunicator {
             if (response?.statusCode == 200){
                 let jsonObject = JSON(json!)
                 invites = self.jsonParser.getInvitesList(jsonObject)
+                completionHandler(invites: invites, success: true)
             }
             else {
-                invites = nil
+                completionHandler(invites: nil, success: false)
             }
         }
-        return invites
     }
     
-    static func sendInviteToUserWithId(id: Int, token: String){
-        let url = "https://www.play-like.me/API/rest/friend/invite/\(id)"
+    static func sendInviteToUserWithId(id: Int){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/friends/invite/\(id)"
         let headers = [
             "Content-Type": "application/json",
             "Authorization": token
@@ -176,8 +186,9 @@ class ServerCommunicator {
         }
     }
     
-    static func acceptInviteFromUserWithId(id: Int, token: String){
-        let url = "https://www.play-like.me/API/rest/friend/accept/\(id)"
+    static func acceptInviteFromUserWithId(id: Int){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/friends/accept/\(id)"
         let headers = [
             "Content-Type": "application/json",
             "Authorization": token
@@ -188,8 +199,9 @@ class ServerCommunicator {
         }
     }
     
-    static func declineInviteFromUserWithId(id: Int, token: String){
-        let url = "https://www.play-like.me/API/rest/friend/decline/\(id)"
+    static func declineInviteFromUserWithId(id: Int){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/friends/decline/\(id)"
         let headers = [
             "Content-Type": "application/json",
             "Authorization": token
@@ -200,8 +212,9 @@ class ServerCommunicator {
         }
     }
     
-    static func deleteUserWithId(id: Int, token: String){
-        let url = "https://www.play-like.me/API/rest/friend/delete/\(id)"
+    static func deleteUserWithId(id: Int){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/friends/delete/\(id)"
         let headers = [
             "Content-Type": "application/json",
             "Authorization": token
@@ -214,7 +227,7 @@ class ServerCommunicator {
     
     //GAME METHODS
     static func commitMove(figures: Array2D<Figure>, gameId: Int){
-        let token = defaults.objectForKey("token") as! String
+        let token = defaults.stringForKey("token")!
         let url = "https://www.play-like.me/API/rest/puzzle/commitMove/\(gameId)"
         let headers = [
             "Content-Type": "application/json",
@@ -242,7 +255,7 @@ class ServerCommunicator {
     }
     
     static func changeFiguresInHand(figures: [Figure], gameId: Int){
-        let token = defaults.objectForKey("token") as! String
+        let token = defaults.stringForKey("token")!
         let url = "https://www.play-like.me/API/rest/puzzle/changeHand/\(gameId)"
         let headers = [
             "Content-Type": "application/json",

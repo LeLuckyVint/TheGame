@@ -58,15 +58,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //Check if there is a token in app
         let defaults = NSUserDefaults.standardUserDefaults()
-//        if let token = defaults.stringForKey("token")
-//        {
-//            self.window?.rootViewController = storyboard.instantiateInitialViewController() as? UIViewController
-//        }
-//        else
-//        {
-//            var vc = storyboard.instantiateViewControllerWithIdentifier("logInViewController") as! LoginViewController
-//            self.window?.rootViewController = vc
-//        }
+        if let token = defaults.stringForKey("token")
+        {
+            self.window?.rootViewController = storyboard.instantiateInitialViewController() as? UIViewController
+        }
+        else
+        {
+            var vc = storyboard.instantiateViewControllerWithIdentifier("logInViewController") as! LoginViewController
+            self.window?.rootViewController = vc
+        }
         
         return true
     }

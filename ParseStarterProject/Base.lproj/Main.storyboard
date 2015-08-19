@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="cCE-A1-j4E">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="YPR-X8-cc5">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -535,10 +535,11 @@
         <scene sceneID="YPs-Qm-d2R">
             <objects>
                 <tableViewController id="N7q-oK-H21" customClass="GamesTableViewController" customModule="The_Game" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="200" sectionHeaderHeight="22" sectionFooterHeight="22" id="aJ1-YS-guK">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="singleLineEtched" rowHeight="200" sectionHeaderHeight="22" sectionFooterHeight="22" id="aJ1-YS-guK">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="separatorColor" red="0.64313725489999995" green="0.84705882349999995" blue="0.82745098039999998" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="gameCell" rowHeight="200" id="VUc-U7-d6X" customClass="GameTableViewCell" customModule="The_Game" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -563,6 +564,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="gameNameLabel" destination="VPR-qJ-r2j" id="Zb7-Q1-ZIi"/>
+                                    <segue destination="hh9-2k-Lbl" kind="show" identifier="showFriends" id="DNx-4r-WPb"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -572,9 +574,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Games" id="kVa-Gf-90j"/>
-                    <connections>
-                        <segue destination="hh9-2k-Lbl" kind="show" identifier="showFriends" id="C5x-VG-aPv"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RTq-nT-z26" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -595,11 +594,22 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KoY-3Q-ZWR">
                                 <rect key="frame" x="16" y="550" width="65" height="30"/>
                                 <state key="normal" title="REDRAW">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" red="0.25098040700000002" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="redrawBoard:" destination="cCE-A1-j4E" eventType="touchUpInside" id="NaS-hk-d2u"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2cb-rb-haU">
+                                <rect key="frame" x="487" y="550" width="97" height="30"/>
+                                <state key="normal" title="Commit Move">
+                                    <color key="titleColor" red="0.25098040700000002" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="commitMove:" destination="cCE-A1-j4E" eventType="touchUpInside" id="XCx-Pj-yXn"/>
+                                    <action selector="redrawBoard:" destination="cCE-A1-j4E" eventType="touchUpInside" id="FwQ-HX-jRe"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -607,12 +617,14 @@
                         <constraints>
                             <constraint firstItem="KoY-3Q-ZWR" firstAttribute="leading" secondItem="Nqp-CN-AKt" secondAttribute="leadingMargin" id="MFv-c5-EOg"/>
                             <constraint firstItem="3n7-3t-n05" firstAttribute="top" secondItem="KoY-3Q-ZWR" secondAttribute="bottom" constant="20" id="XjF-cn-dun"/>
+                            <constraint firstItem="3n7-3t-n05" firstAttribute="top" secondItem="2cb-rb-haU" secondAttribute="bottom" constant="20" id="c4x-Us-j7m"/>
+                            <constraint firstItem="2cb-rb-haU" firstAttribute="trailing" secondItem="Nqp-CN-AKt" secondAttribute="trailingMargin" id="tsT-wn-1q1"/>
                         </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hob-Jo-TwM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1438.5" y="1743.75"/>
+            <point key="canvasLocation" x="1716" y="1774"/>
         </scene>
         <!--Invite View Controller-->
         <scene sceneID="RMm-WJ-rse">

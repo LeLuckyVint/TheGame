@@ -16,7 +16,7 @@ class RoomsTableViewController: UITableViewController {
     let games = [GameType.PUZZLE]
     
     let reachability = Reachability.reachabilityForInternetConnection()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController!.navigationBar.barTintColor = Standart.purpleColor
@@ -27,40 +27,36 @@ class RoomsTableViewController: UITableViewController {
         self.tableView.backgroundColor = Standart.purpleColor
         self.tableView.tableFooterView = backgroundView
         reachability.startNotifier()
-
-        if let token = defaults.stringForKey("token")
-        {
-            if reachability.isReachable(){
-                ServerCommunicator.getProfile(token)
-                if let roomsFromServer = ServerCommunicator.getRooms(token){
-                    rooms = roomsFromServer
-                    self.tableView?.reloadData()
+        
+        if reachability.isReachable(){
+            ServerCommunicator.getProfile()
+            ServerCommunicator.getRooms(){
+                array, success in
+                if success{
+                    self.rooms = array!
                 }
-                else{
-                    rooms = []
-                }
-            }
-            else{
-                Reachability.showAlert(self)
+                self.tableView?.reloadData()
             }
         }
-
+        else{
+            Reachability.showAlert(self)
+        }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return rooms.count + 1
     }
-
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == rooms.count{
             var cell = tableView.dequeueReusableCellWithIdentifier("newRoomCell", forIndexPath: indexPath) as! NewRoomTableViewCell
@@ -105,6 +101,6 @@ class RoomsTableViewController: UITableViewController {
         else{
             Reachability.showAlert(self)
         }
-
+        
     }
 }

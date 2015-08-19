@@ -29,7 +29,6 @@ class LoginViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func dissmissKeyboard(){
@@ -43,22 +42,6 @@ class LoginViewController: UIViewController {
     
     @IBAction func login(sender: UIButton) {
         ServerCommunicator.login(usernameField.text, password: passwordField.text)
-
-//        var request = HTTPTask()
-//        request.requestSerializer.headers["Content-Type"] = "application/json"
-//        request.responseSerializer = JSONResponseSerializer()
-//        
-//        let params: Dictionary<String,AnyObject> = ["username": usernameField.text, "password": passwordField.text, "installationId": inst]
-//        request.POST("https://www.play-like.me/API/rest/login", parameters: params, completionHandler: {(response: HTTPResponse) in
-//            println(response.text)
-//            if let err = response.error {
-//                println("error: \(err.localizedDescription)")
-//                return //also notify app of failure as needed
-//            }
-//            if let res: AnyObject = response.responseObject {
-//                println("response: \(res)")
-//            }
-//        })
     }
     
     @IBAction func signUp(sender: UIButton) {

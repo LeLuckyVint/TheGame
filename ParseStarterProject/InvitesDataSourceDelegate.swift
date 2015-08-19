@@ -9,11 +9,9 @@
 import Foundation
 import UIKit
 
-class InvitesDataSourceDelegate:NSObject, UITableViewDataSource {
-    var invites: [Invite]!
-    let profileIdentifier = "profile"
-    
-    let token = NSUserDefaults.standardUserDefaults().objectForKey("token") as! String
+class InvitesDataSourceDelegate:NSObject, UITableViewDataSource, UITableViewDelegate {
+    var invites: [Invite] = []
+    let profileIdentifier = "playerCell"
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return invites.count
@@ -30,8 +28,20 @@ class InvitesDataSourceDelegate:NSObject, UITableViewDataSource {
         
         return cell
     }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
     
     func updateInvitesList(){
-        invites = ServerCommunicator.getInvitesFriendsList(token)
+        ServerCommunicator.getInvitesFriendsList{
+            array, success in
+            if success{
+                self.invites = array!
+            }
+        }
     }
 }

@@ -25,19 +25,6 @@ class InviteViewController: UIViewController {
     }
     
     @IBAction func sendInvite(sender: UIButton) {
-        let token = NSUserDefaults.standardUserDefaults().stringForKey("token")
-        println(typeOfGame.getStringForJSON())
-        println(token)
-        ServerCommunicator.sendInviteToUserWithId(userIdTextField.text!.toInt()!, token: token!)
+        ServerCommunicator.sendInviteToUserWithId(userIdTextField.text!.toInt()!)
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

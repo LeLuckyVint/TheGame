@@ -52,6 +52,7 @@ class JSONParser {
     
     func getFriends(json: JSON) -> [User]{
         var friends: [User] = []
+        
         let friendsJSONArray = json.arrayValue
         for friendJSON in friendsJSONArray{
             let id = friendJSON["id"].int!

@@ -70,9 +70,15 @@ class GameViewController: UIViewController {
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
+    
     @IBAction func redrawBoard(sender: UIButton) {
         scene.redrawBoard()
         scene.addSpritesForFigures(gameBoard.figuresArray)
         scene.addFiguresForHand(gameBoard.hand)
     }
+    
+    @IBAction func commitMove(sender: UIButton) {
+        scene.commitMove()
+    }
+    
 }

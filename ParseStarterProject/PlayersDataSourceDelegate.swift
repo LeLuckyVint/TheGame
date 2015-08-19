@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-class PlayersDataSourceDelegate: NSObject, UITableViewDataSource {
-    var friends: [User]!
-    let profileIdentifier = "profile"
+class PlayersDataSourceDelegate: NSObject, UITableViewDataSource, UITableViewDelegate {
+    var friends: [User] = []
+    let profileIdentifier = "playerCell"
     
     let token = NSUserDefaults.standardUserDefaults().objectForKey("token") as! String
     
@@ -37,7 +37,29 @@ class PlayersDataSourceDelegate: NSObject, UITableViewDataSource {
             return cell
         }
     }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
     func updateFriendsList(){
-        friends = ServerCommunicator.getFriendsList(token)
+        ServerCommunicator.getFriendsList{
+            array, success in
+            if success{
+                self.friends = array!
+            }
+            else{
+                println("pizda")
+            }
+        }
+    }
+    
+    override init(){
+        super.init()
+        updateFriendsList()
     }
 }

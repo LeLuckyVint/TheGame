@@ -12,8 +12,6 @@ import SpriteKit
 public class Figure{
     private var type: Type?
     private var color: Color?
-    var column: Int?
-    var row: Int?
     var sprite: SKSpriteNode?
     
     public init(type: Type, color: Color){
@@ -21,11 +19,6 @@ public class Figure{
         self.color = color
         //self.column = nil
         //self.row = nil
-    }
-    
-    public func placeFigureAtRow(row: Int, Column column: Int){
-        self.column = column
-        self.row = row
     }
     
     public func getType() -> Type! {
@@ -50,6 +43,36 @@ public class Figure{
             }
         }
         return ""
+    }
+    
+    static func getRandomFigure() -> Figure{
+        let randColor = arc4random_uniform(6)
+        let randType = arc4random_uniform(6)
+        let type: Type!
+        let color: Color!
+        switch(randColor){
+        case 0: color = .RED
+        case 1: color = .BLUE
+        case 2: color = .YELLOW
+        case 3: color = .CYAN
+        case 4: color = .PINK
+        case 5: color = .ORANGE
+        default:
+            color = .RED
+        }
+        
+        switch(randType){
+        case 0: type = .MOON
+        case 1: type = .CIRCLE
+        case 2: type = .CHRIS
+        case 3: type = .TRIANGLE
+        case 4: type = .STAR
+        case 5: type = .HEART
+        default:
+            type = .HEART
+        }
+        
+        return Figure(type: type, color: color)
     }
 }
 extension Figure: Hashable{
