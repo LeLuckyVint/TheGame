@@ -124,7 +124,8 @@ class ServerCommunicator {
         }
         return rooms
     }
-
+    
+    // FRIENDS METHODS
     static func getFriendsList(token: String) -> [User]?{
         let url = "https://www.play-like.me/API/rest/friend/friends"
         let headers = [
@@ -143,7 +144,7 @@ class ServerCommunicator {
         }
         return friends
     }
-
+    
     static func getInvitesFriendsList(token: String) -> [Invite]?{
         let url = "https://www.play-like.me/API/rest/friend/friends"
         let headers = [
@@ -210,6 +211,58 @@ class ServerCommunicator {
             println(response?.statusCode)
         }
     }
+    
+    //GAME METHODS
+    static func commitMove(figures: Array2D<Figure>, gameId: Int){
+        let token = defaults.objectForKey("token") as! String
+        let url = "https://www.play-like.me/API/rest/puzzle/commitMove/\(gameId)"
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": token
+        ]
+        var jsonToSend = Dictionary<String, AnyObject>()
+        var dict = [Dictionary<String, AnyObject>]()
+        for column in 0..<colNumber{
+            for row in 0..<rowNumber{
+                let figure = figures[column, row]
+                if figure != nil{
+                    let jsonFigure = ["type":figure!.getType().stringForServer, "color":figure!.getColor().stringForServer]
+                    let json = ["figure": jsonFigure, "column":column, "row":row]
+                    dict.append(json as! Dictionary<String, AnyObject>)
+                }
+            }
+        }
+        jsonToSend = ["moves":dict]
+        
+        Alamofire.request(.POST, url, parameters: jsonToSend, encoding: .JSON, headers: headers).response{ _, response, json, _ in
+            if response?.statusCode == 200{
+                
+            }
+        }
+    }
+    
+    static func changeFiguresInHand(figures: [Figure], gameId: Int){
+        let token = defaults.objectForKey("token") as! String
+        let url = "https://www.play-like.me/API/rest/puzzle/changeHand/\(gameId)"
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": token
+        ]
+        var jsonToSend = Dictionary<String, AnyObject>()
+        var dict = [Dictionary<String, AnyObject>]()
+        for figure in figures{
+            let jsonFigure = ["type":figure.getType().stringForServer, "color":figure.getColor().stringForServer]
+            dict.append(jsonFigure)
+        }
+        jsonToSend = ["figures":dict]
+        
+        Alamofire.request(.POST, url, parameters: jsonToSend, encoding: .JSON, headers: headers).response{ _, response, json, _ in
+            if response?.statusCode == 200{
+                
+            }
+        }
+    }
+    
 }
 private var _sharedCommunicator = ServerCommunicator()
 

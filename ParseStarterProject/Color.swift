@@ -46,4 +46,26 @@ public enum Color{
         }
         return ""
     }
+    
+    public var stringForServer: String{
+        if self == .RED{
+            return "RED"
+        }
+        if self == .BLUE{
+            return "BLUE"
+        }
+        if self == .PINK{
+            return "PINK"
+        }
+        if self == .ORANGE{
+            return "ORANGE"
+        }
+        if self == .CYAN{
+            return "CYAN"
+        }
+        if self == .YELLOW{
+            return "YELLOW"
+        }
+        return ""
+    }
 }

@@ -13,6 +13,7 @@ let rowNumber = 10
 let handNumber = 7
 class GameBoard{
     var figuresArray = Array2D<Figure>(columns: colNumber, rows: rowNumber)
+    var currentMoveFiguresArray = Array2D<Figure>(columns: colNumber, rows: rowNumber)
     
     private var tiles = Array2D<Tile>(columns: colNumber, rows: rowNumber)
     

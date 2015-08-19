@@ -46,5 +46,26 @@ public enum Type{
         }
         return ""
     }
+    public var stringForServer: String{
+        if self == .TRIANGLE{
+            return "TRIANGLE"
+        }
+        if self == .CIRCLE{
+            return "CIRCLE"
+        }
+        if self == .STAR{
+            return "STAR"
+        }
+        if self == .CHRIS{
+            return "CROSS"
+        }
+        if self == .MOON{
+            return "MOON"
+        }
+        if self == .HEART{
+            return "HEART"
+        }
+        return ""
+    }
     
 }
