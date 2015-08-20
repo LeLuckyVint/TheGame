@@ -10,15 +10,16 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class SignUpViewController: UIViewController, UITextFieldDelegate {
+class SignUpViewController: ResponsiveTextFieldViewController, UITextFieldDelegate {
     let defaults = NSUserDefaults.standardUserDefaults()
+    var defaultDelegate: TextFieldDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.usernameField.delegate = self
-        self.passwordField.delegate = self
-        self.emailField.delegate = self
+        defaultDelegate = TextFieldDelegate(vc: self)
+        self.usernameField.delegate = defaultDelegate
+        self.passwordField.delegate = defaultDelegate
+        self.emailField.delegate = defaultDelegate
         
         passwordField.attributedPlaceholder = NSAttributedString(string:"Password",
             attributes:[NSForegroundColorAttributeName: UIColor(red: 0x21, green: 0x21, blue: 0x21, alpha: 0.6)])
@@ -26,22 +27,19 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             attributes:[NSForegroundColorAttributeName: UIColor(red: 0x21, green: 0x21, blue: 0x21, alpha: 0.6)])
         emailField.attributedPlaceholder = NSAttributedString(string:"E-mail",
             attributes:[NSForegroundColorAttributeName: UIColor(red: 0x21, green: 0x21, blue: 0x21, alpha: 0.6)])
-        
-        var tap = UITapGestureRecognizer(target: self, action: "dissmissKeyboard")
-        self.view.addGestureRecognizer(tap)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        registerForKeyboardNotifications()
+    }
+    override func viewWillDisappear(animated: Bool) {
+        deregisterFromKeyboardNotifications()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-    
-    func dissmissKeyboard(){
-        usernameField.resignFirstResponder()
-        passwordField.resignFirstResponder()
-        emailField.resignFirstResponder()
-    }
-    
+
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!

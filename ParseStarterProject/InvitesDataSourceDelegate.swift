@@ -12,6 +12,7 @@ import UIKit
 class InvitesDataSourceDelegate:NSObject, UITableViewDataSource, UITableViewDelegate {
     var invites: [Invite] = []
     let profileIdentifier = "playerCell"
+    var controller: PlayersTableViewController!
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return invites.count

@@ -10,30 +10,36 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class LoginViewController: UIViewController {
+class LoginViewController: ResponsiveTextFieldViewController {
     
     let defaults = NSUserDefaults.standardUserDefaults()
     let jsonParser = JSONParser.sharedInstance
+    var defaultDelegate: TextFieldDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        defaultDelegate = TextFieldDelegate(vc: self)
+        self.usernameField.delegate = defaultDelegate
+        self.passwordField.delegate = defaultDelegate
         
         usernameField.attributedPlaceholder = NSAttributedString(string:"Username",
             attributes:[NSForegroundColorAttributeName: UIColor(red: 0x21, green: 0x21, blue: 0x21, alpha: 0.6)])
         passwordField.attributedPlaceholder = NSAttributedString(string:"Password",
             attributes:[NSForegroundColorAttributeName: UIColor(red: 0x21, green: 0x21, blue: 0x21, alpha: 0.6)])
-        var tap = UITapGestureRecognizer(target: self, action: "dissmissKeyboard")
-        
+        var tap = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         self.view.addGestureRecognizer(tap)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        registerForKeyboardNotifications()
+    }
+    override func viewWillDisappear(animated: Bool) {
+        deregisterFromKeyboardNotifications()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    func dissmissKeyboard(){
-        usernameField.resignFirstResponder()
-        passwordField.resignFirstResponder()
     }
     
     @IBOutlet weak var usernameField: UITextField!

@@ -15,6 +15,8 @@ class PlayersDataSourceDelegate: NSObject, UITableViewDataSource, UITableViewDel
     
     let token = NSUserDefaults.standardUserDefaults().objectForKey("token") as! String
     
+    var controller: PlayersTableViewController!
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return friends.count + 1
     }
@@ -37,9 +39,14 @@ class PlayersDataSourceDelegate: NSObject, UITableViewDataSource, UITableViewDel
             return cell
         }
     }
-    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        if indexPath.row == friends.count{
+            controller.performSegueWithIdentifier("sendInvite", sender: nil)
+        }
+        else{
+            let cell = tableView.dequeueReusableCellWithIdentifier(profileIdentifier, forIndexPath: indexPath) as! PlayerTableViewCell
+            //controller.performSegueWithIdentifier("showGame", sender: cell)
+        }
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

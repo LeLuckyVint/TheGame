@@ -21,6 +21,9 @@ class PlayersTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         segmentControl.selectedSegmentIndex = 0
+        friendsDataSource.controller = self
+        invitesDataSource.controller = self
+        
         self.tableView.delegate = friendsDataSource
         self.tableView.dataSource = friendsDataSource
         
