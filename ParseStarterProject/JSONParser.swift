@@ -101,6 +101,19 @@ class JSONParser {
         
         return User(id: id, username: username, avatar: avatar,email: email)
     }
+    
+    func getUsersFromSearch(json: NSArray) -> [User]{
+        var users: [User] = []
+        let json = json as! [JSON]
+        for userJSON in json{
+            let id = userJSON["id"].intValue
+            let username = userJSON["username"].string!
+            let email = userJSON["email"].string!
+            let avatar = userJSON["avatar"].object as? NSURL
+            users.append(User(id: id, username: username, avatar: avatar,email: email))
+        }
+        return users
+    }
 }
 extension String{
     func toGameType() -> GameType{

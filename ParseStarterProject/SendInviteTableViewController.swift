@@ -8,11 +8,13 @@
 
 import UIKit
 
-class SendInviteTableViewController: UITableViewController {
+class SendInviteTableViewController: UITableViewController, UISearchBarDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
+    var results: [User] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBar.delegate = self
         
     }
 
@@ -23,9 +25,44 @@ class SendInviteTableViewController: UITableViewController {
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("searchCell", forIndexPath: indexPath) as! SearchTableViewCell
+        
+        cell.usernameLabel.text = results[indexPath.row].username
+        return cell
     }
 
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return results.count
+    }
+    func searchBarResultsListButtonClicked(searchBar: UISearchBar) {
+        let text = searchBar.text
+        ServerCommunicator.searchUsers(text){
+            users, success in
+            if success{
+                self.results = users
+                self.tableView.reloadData()
+            }
+        }
+    }
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        let text = searchBar.text
+        ServerCommunicator.searchUsers(text){
+            users, success in
+            if success{
+                self.results = users
+                self.tableView.reloadData()
+            }
+        }
+    }
+//    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+//        let text = searchBar.text
+//        ServerCommunicator.searchUsers(text){
+//            users, success in
+//            if success{
+//                self.results = users
+//                self.tableView.reloadData()
+//            }
+//        }
+//    }
 }

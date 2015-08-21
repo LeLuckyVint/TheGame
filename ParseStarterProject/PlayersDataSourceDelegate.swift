@@ -41,7 +41,7 @@ class PlayersDataSourceDelegate: NSObject, UITableViewDataSource, UITableViewDel
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == friends.count{
-            controller.performSegueWithIdentifier("sendInvite", sender: nil)
+            controller.performSegueWithIdentifier("sendInvite", sender: self)
         }
         else{
             let cell = tableView.dequeueReusableCellWithIdentifier(profileIdentifier, forIndexPath: indexPath) as! PlayerTableViewCell

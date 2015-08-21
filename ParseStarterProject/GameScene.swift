@@ -15,6 +15,7 @@ class GameScene: SKScene {
     let TileHeight: CGFloat = 30.0
     
     let gameLayer = SKNode()
+    let cameraNode = SKNode()
     let figuresLayer = SKNode()
     let tilesLayer = SKNode()
     let handLayer = SKNode()
@@ -56,12 +57,12 @@ class GameScene: SKScene {
         gameLayer.addChild(figuresLayer)
         
         handTilesLayer.position = handPosition
-        gameLayer.addChild(handTilesLayer)
+        addChild(handTilesLayer)
         
         handLayer.position = handPosition
-        gameLayer.addChild(handLayer)
+        addChild(handLayer)
         
-        
+        gameLayer.addChild(cameraNode)
     }
     
     func addSpritesForFigures(figures: Array2D<Figure>) {
@@ -361,4 +362,30 @@ class GameScene: SKScene {
         }
         gameBoard.clearCurrentMoveArray()
     }
+    
+//    override func didMoveToView(view: SKView) {
+//        let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: "handleZoomFrom:")
+//        self.view?.addGestureRecognizer(pinchGestureRecognizer)
+//    }
+//    
+//    func handleZoomFrom(recognizer: UIPinchGestureRecognizer){
+//        var anchorPoint = recognizer.locationInView(recognizer.view)
+//        anchorPoint = self.convertPointFromView(anchorPoint)
+//        if recognizer.state == UIGestureRecognizerState.Changed{
+//            var anchorPointInMySKNode = gameLayer.convertPoint(anchorPoint, fromNode: self)
+//            gameLayer.setScale(gameLayer.xScale * recognizer.scale)
+//            var mySKNodeAnchorPointInScene = self.convertPoint(anchorPointInMySKNode, fromNode: gameLayer)
+//            var translationOfAnchorInScene = CGPointSubtract(anchorPoint, point2: mySKNodeAnchorPointInScene)
+//            gameLayer.position = CGPointAdd(gameLayer.position, point2: translationOfAnchorInScene)
+//            recognizer.scale = 1
+//        }
+//    }
+//    
+//    func CGPointSubtract(point1: CGPoint, point2: CGPoint) -> CGPoint{
+//        return CGPointMake(point1.x - point2.x, point1.y - point2.y);
+//    }
+//    func CGPointAdd(point1: CGPoint, point2: CGPoint) -> CGPoint{
+//        return CGPointMake(point1.x + point2.x, point1.y + point2.y);
+//    }
+
 }

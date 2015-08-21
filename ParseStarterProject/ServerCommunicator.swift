@@ -276,6 +276,21 @@ class ServerCommunicator {
         }
     }
     
+    static func searchUsers(text: String, completionHandler: (users: [User], success: Bool)->Void){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/search/" + text
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": token
+        ]
+        Alamofire.request(.GET, url, encoding: .JSON, headers: headers).responseJSON{ _, response, json, _ in
+            if response?.statusCode == 200{
+                let users = JSONParser.sharedInstance.getUsersFromSearch(json as! NSArray)
+                completionHandler(users: users, success: true)
+            }
+        }
+    }
+    
 }
 private var _sharedCommunicator = ServerCommunicator()
 

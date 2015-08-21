@@ -52,6 +52,7 @@
 		B4BE92101B85C2EE008D9A86 /* SendInviteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BE920F1B85C2EE008D9A86 /* SendInviteTableViewController.swift */; };
 		B4BE921C1B85EBDD008D9A86 /* ResponsiveTextFieldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BE921B1B85EBDD008D9A86 /* ResponsiveTextFieldViewController.swift */; };
 		B4BE92241B85ED78008D9A86 /* TextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4BE92231B85ED78008D9A86 /* TextFieldDelegate.swift */; };
+		D807FEE21B86651F003CCCA7 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807FEE11B86651F003CCCA7 /* SearchTableViewCell.swift */; };
 		D84CFD471B6E34F5005D9047 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CFD461B6E34F5005D9047 /* Room.swift */; };
 		D84CFD491B6E3582005D9047 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CFD481B6E3582005D9047 /* User.swift */; };
 		D84CFD4B1B6E36E3005D9047 /* GameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84CFD4A1B6E36E3005D9047 /* GameType.swift */; };
@@ -211,6 +212,7 @@
 		B4BE920F1B85C2EE008D9A86 /* SendInviteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendInviteTableViewController.swift; sourceTree = "<group>"; };
 		B4BE921B1B85EBDD008D9A86 /* ResponsiveTextFieldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponsiveTextFieldViewController.swift; sourceTree = "<group>"; };
 		B4BE92231B85ED78008D9A86 /* TextFieldDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldDelegate.swift; sourceTree = "<group>"; };
+		D807FEE11B86651F003CCCA7 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		D84CFD461B6E34F5005D9047 /* Room.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
 		D84CFD481B6E3582005D9047 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D84CFD4A1B6E36E3005D9047 /* GameType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameType.swift; sourceTree = "<group>"; };
@@ -353,6 +355,7 @@
 				B4BA12911B7B9AD50075F84A /* PlayersDataSourceDelegate.swift */,
 				B4BA12961B7B9B670075F84A /* InvitesDataSourceDelegate.swift */,
 				B4BE920F1B85C2EE008D9A86 /* SendInviteTableViewController.swift */,
+				D807FEE11B86651F003CCCA7 /* SearchTableViewCell.swift */,
 			);
 			name = Table;
 			sourceTree = "<group>";
@@ -576,6 +579,7 @@
 				B4BE921C1B85EBDD008D9A86 /* ResponsiveTextFieldViewController.swift in Sources */,
 				B4B7F36A1B6278E00091D3D0 /* Color.swift in Sources */,
 				B4BA12971B7B9B670075F84A /* InvitesDataSourceDelegate.swift in Sources */,
+				D807FEE21B86651F003CCCA7 /* SearchTableViewCell.swift in Sources */,
 				B4B7F36C1B6278E00091D3D0 /* GameBoard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
