@@ -25,26 +25,23 @@ class SendInviteTableViewController: UITableViewController, UISearchBarDelegate 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return results.count
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("searchCell", forIndexPath: indexPath) as! SearchTableViewCell
         
         cell.usernameLabel.text = results[indexPath.row].username
         return cell
     }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        ServerCommunicator.sendInviteToUserWithId(results[indexPath.row].id)
+        self.parentViewController!.dismissViewControllerAnimated(true, completion: nil)
+    }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return results.count
-    }
-    func searchBarResultsListButtonClicked(searchBar: UISearchBar) {
-        let text = searchBar.text
-        ServerCommunicator.searchUsers(text){
-            users, success in
-            if success{
-                self.results = users
-                self.tableView.reloadData()
-            }
-        }
-    }
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         let text = searchBar.text
         ServerCommunicator.searchUsers(text){
@@ -54,15 +51,7 @@ class SendInviteTableViewController: UITableViewController, UISearchBarDelegate 
                 self.tableView.reloadData()
             }
         }
+        searchBar.resignFirstResponder()
     }
-//    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-//        let text = searchBar.text
-//        ServerCommunicator.searchUsers(text){
-//            users, success in
-//            if success{
-//                self.results = users
-//                self.tableView.reloadData()
-//            }
-//        }
-//    }
+    
 }

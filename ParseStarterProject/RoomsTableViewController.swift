@@ -13,6 +13,7 @@ class RoomsTableViewController: UITableViewController {
     let defaults = NSUserDefaults.standardUserDefaults()
     
     var rooms = [Room]()
+    var invites = [RoomInvite]()
     let games = [GameType.PUZZLE]
     
     let reachability = Reachability.reachabilityForInternetConnection()
@@ -30,6 +31,12 @@ class RoomsTableViewController: UITableViewController {
         
         if reachability.isReachable(){
             ServerCommunicator.getProfile()
+            ServerCommunicator.getRoomInvites{
+                array, success in
+                if success{
+                    self.invites = array
+                }
+            }
             ServerCommunicator.getRooms(){
                 array, success in
                 if success{
@@ -54,15 +61,15 @@ class RoomsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return rooms.count + 1
+        return rooms.count + invites.count + 1
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row == rooms.count{
+        if indexPath.row == rooms.count + invites.count{
             var cell = tableView.dequeueReusableCellWithIdentifier("newRoomCell", forIndexPath: indexPath) as! NewRoomTableViewCell
             return cell
         }
-        else{
+        else if indexPath.row >= invites.count && indexPath.row < rooms.count + invites.count{
             var cell = tableView.dequeueReusableCellWithIdentifier("roomCell", forIndexPath: indexPath) as! RoomTableViewCell
             // Configure the cell
             let room = rooms[indexPath.row]
@@ -80,6 +87,17 @@ class RoomsTableViewController: UITableViewController {
             cell.opponentScoreLabel.text = "\(opponent.score)"
             
             return cell
+
+        }
+        else{
+            var cell = tableView.dequeueReusableCellWithIdentifier("roomInviteCell", forIndexPath: indexPath) as! RoomInviteTableViewCell
+            
+            let invite = invites[indexPath.row]
+            
+            cell.usernameLabel.text = invite.creator.username
+            cell.avatarImageView.image = UIImage(data: NSData(contentsOfURL: invite.creator.avatarURL!)!)
+            cell.roomId = invite.id
+            return cell
         }
     }
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -92,7 +110,11 @@ class RoomsTableViewController: UITableViewController {
             if indexPath.row == rooms.count{
                 self.performSegueWithIdentifier("showGames", sender: self)
             }
-                //Tapped existed room
+                //tapped room
+            else if indexPath.row >= invites.count && indexPath.row < rooms.count + invites.count{
+                ServerCommunicator.ge
+            }
+                //Tapped invite to room
             else{
                 
             }

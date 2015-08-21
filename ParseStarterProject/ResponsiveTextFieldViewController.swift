@@ -12,7 +12,9 @@ class ResponsiveTextFieldViewController : UIViewController
 {
     weak var activeField: UITextField?
     var wasMoved = false
+    var isKeyboardOnScreen = false
     var height: CGFloat!
+    var moveDistance: CGFloat!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,34 +42,35 @@ class ResponsiveTextFieldViewController : UIViewController
     }
     func keyboardWasShown(notification: NSNotification)
     {
-        //Need to calculate keyboard exact size due to Apple suggestions
-        var info : NSDictionary = notification.userInfo!
-        var keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size
-        
-        var aRect : CGRect = self.view.frame
-        aRect.size.height -= keyboardSize!.height + activeField!.bounds.height
-        
-        //height = self.view.bounds.maxY - activeField!.bounds.maxY
-        height = activeField!.frame.origin.y + activeField!.bounds.height
-        if let activeFieldPresent = activeField
-        {
-            if (!CGRectContainsPoint(aRect, activeField!.frame.origin))
+        if !isKeyboardOnScreen{
+            isKeyboardOnScreen = true
+            var info : NSDictionary = notification.userInfo!
+            var keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size
+            
+            var aRect : CGRect = self.view.frame
+            aRect.size.height -= keyboardSize!.height + activeField!.bounds.height
+            
+            //height = self.view.bounds.maxY - activeField!.bounds.maxY
+            height = activeField!.frame.origin.y + activeField!.bounds.height
+            if let activeFieldPresent = activeField
             {
-                wasMoved = true
-                UIView.animateWithDuration(0.1, animations: { () -> Void in
-                    //self.view.frame.origin.y -= self.height - keyboardSize!.height
-                    self.view.frame.origin.y -= (self.height - self.view.frame.height + keyboardSize!.height)
-                })
+                if (!CGRectContainsPoint(aRect, activeField!.frame.origin))
+                {
+                    wasMoved = true
+                    UIView.animateWithDuration(0.1, animations: { () -> Void in
+                        self.moveDistance = (self.height - self.view.frame.height + keyboardSize!.height)
+                        self.view.frame.origin.y -= self.moveDistance
+                    })
+                }
             }
         }
     }
     
     func keyboardWillBeHidden(notification: NSNotification)
     {
+        isKeyboardOnScreen = false
         if wasMoved{
-            var info : NSDictionary = notification.userInfo!
-            var keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue().size
-            self.view.frame.origin.y += (self.height - self.view.frame.height + keyboardSize!.height)
+            self.view.frame.origin.y += moveDistance
         }
         wasMoved = false
     }

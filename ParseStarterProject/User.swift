@@ -15,7 +15,8 @@ class User {
     var email: String?
     var avatarURL: NSURL?
     var avatar: UIImage?{
-        return UIImage(data: NSData(contentsOfURL: avatarURL!)!)
+        //return UIImage(data: NSData(contentsOfURL: avatarURL!)!)
+        return UIImage(data: NSData(contentsOfURL: NSURL(string: "http://cs623318.vk.me/v623318367/1eab5/rCiTafl2x_s.jpg")!)!)
     }
     
     static var currentUser: User?

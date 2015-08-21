@@ -35,9 +35,13 @@ class PlayersDataSourceDelegate: NSObject, UITableViewDataSource, UITableViewDel
             cell.usernameLabel.text = friend.username
             cell.avatarImageView.image = friend.avatar
             cell.emailLabel.text = friend.email
+            cell.friendId = friend.id
             
             return cell
         }
+    }
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 200
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == friends.count{
@@ -45,7 +49,16 @@ class PlayersDataSourceDelegate: NSObject, UITableViewDataSource, UITableViewDel
         }
         else{
             let cell = tableView.dequeueReusableCellWithIdentifier(profileIdentifier, forIndexPath: indexPath) as! PlayerTableViewCell
-            //controller.performSegueWithIdentifier("showGame", sender: cell)
+            let userId = friends[indexPath.row].id
+            let type = controller.typeOfGame.getStringForJSON()
+            ServerCommunicator.createRoom(userId, type: type){
+                success in
+                let ac = UIAlertController.createAlertViewWithTitle("Success!", message: "Wait til your friend accept the game")
+                var vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("roomsViewController") as! RoomsTableViewController
+                self.controller.presentViewController(vc, animated: true, completion: nil)
+                vc.presentViewController(ac, animated: true, completion: nil)
+                
+            }
         }
     }
     
@@ -57,16 +70,18 @@ class PlayersDataSourceDelegate: NSObject, UITableViewDataSource, UITableViewDel
         ServerCommunicator.getFriendsList{
             array, success in
             if success{
-                self.friends = array!
+                self.friends = array
             }
             else{
                 println("pizda")
             }
+            self.controller.tableView.reloadData()
         }
     }
     
     override init(){
         super.init()
         updateFriendsList()
+        
     }
 }

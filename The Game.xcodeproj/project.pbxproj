@@ -25,6 +25,10 @@
 		B4355DCD1B735FFC008C0413 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4355DCC1B735FFC008C0413 /* SpriteKit.framework */; };
 		B4355DCF1B736E29008C0413 /* Tiles.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4355DCE1B736E29008C0413 /* Tiles.xcassets */; };
 		B4355DD11B73868E008C0413 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4355DD01B73868D008C0413 /* Tile.swift */; };
+		B4B2C9051B8771DA00CF94AB /* InviteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B2C9041B8771DA00CF94AB /* InviteTableViewCell.swift */; };
+		B4B2C90D1B8793AC00CF94AB /* RoomInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B2C90C1B8793AC00CF94AB /* RoomInvite.swift */; };
+		B4B2C90F1B87970500CF94AB /* RoomInviteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B2C90E1B87970500CF94AB /* RoomInviteTableViewCell.swift */; };
+		B4B2C9111B879E3100CF94AB /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B2C9101B879E3100CF94AB /* Game.swift */; };
 		B4B7F3551B6278430091D3D0 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B7F3541B6278430091D3D0 /* SignUpViewController.swift */; };
 		B4B7F35F1B6278B50091D3D0 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4B7F35E1B6278B50091D3D0 /* Launch Screen.xib */; };
 		B4B7F3691B6278E00091D3D0 /* Bag.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B7F3611B6278E00091D3D0 /* Bag.swift */; };
@@ -185,6 +189,10 @@
 		B4355DCC1B735FFC008C0413 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		B4355DCE1B736E29008C0413 /* Tiles.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Tiles.xcassets; sourceTree = "<group>"; };
 		B4355DD01B73868D008C0413 /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
+		B4B2C9041B8771DA00CF94AB /* InviteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InviteTableViewCell.swift; sourceTree = "<group>"; };
+		B4B2C90C1B8793AC00CF94AB /* RoomInvite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomInvite.swift; sourceTree = "<group>"; };
+		B4B2C90E1B87970500CF94AB /* RoomInviteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomInviteTableViewCell.swift; sourceTree = "<group>"; };
+		B4B2C9101B879E3100CF94AB /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		B4B7F3541B6278430091D3D0 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		B4B7F35E1B6278B50091D3D0 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		B4B7F3611B6278E00091D3D0 /* Bag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bag.swift; sourceTree = "<group>"; };
@@ -327,6 +335,8 @@
 				D84CFD4A1B6E36E3005D9047 /* GameType.swift */,
 				D84CFD481B6E3582005D9047 /* User.swift */,
 				D84CFD461B6E34F5005D9047 /* Room.swift */,
+				B4B2C90C1B8793AC00CF94AB /* RoomInvite.swift */,
+				B4B2C9101B879E3100CF94AB /* Game.swift */,
 				B4B7F3611B6278E00091D3D0 /* Bag.swift */,
 				B4B7F3621B6278E00091D3D0 /* Color.swift */,
 				B4B7F3631B6278E00091D3D0 /* Figure.swift */,
@@ -347,11 +357,13 @@
 			children = (
 				B4BA12851B7B93BD0075F84A /* RoomsTableViewController.swift */,
 				B4BA12871B7B93F10075F84A /* RoomTableViewCell.swift */,
+				B4B2C90E1B87970500CF94AB /* RoomInviteTableViewCell.swift */,
 				B4BBB4121B7C8FC4007D5855 /* NewRoomTableViewCell.swift */,
 				B4BA12891B7B97B70075F84A /* GamesTableViewController.swift */,
 				B4BA128B1B7B97C40075F84A /* GameTableViewCell.swift */,
 				B4BA128F1B7B99EA0075F84A /* PlayersTableViewController.swift */,
 				B4BA128D1B7B99DB0075F84A /* PlayerTableViewCell.swift */,
+				B4B2C9041B8771DA00CF94AB /* InviteTableViewCell.swift */,
 				B4BA12911B7B9AD50075F84A /* PlayersDataSourceDelegate.swift */,
 				B4BA12961B7B9B670075F84A /* InvitesDataSourceDelegate.swift */,
 				B4BE920F1B85C2EE008D9A86 /* SendInviteTableViewController.swift */,
@@ -549,8 +561,10 @@
 				B4B7F3551B6278430091D3D0 /* SignUpViewController.swift in Sources */,
 				D84CFD4D1B6E39F2005D9047 /* JSONParser.swift in Sources */,
 				B4BE92241B85ED78008D9A86 /* TextFieldDelegate.swift in Sources */,
+				B4B2C9051B8771DA00CF94AB /* InviteTableViewCell.swift in Sources */,
 				B4355DD11B73868E008C0413 /* Tile.swift in Sources */,
 				D84CFD471B6E34F5005D9047 /* Room.swift in Sources */,
+				B4B2C90F1B87970500CF94AB /* RoomInviteTableViewCell.swift in Sources */,
 				B4B7F36E1B6278E00091D3D0 /* Move.swift in Sources */,
 				B4BE92101B85C2EE008D9A86 /* SendInviteTableViewController.swift in Sources */,
 				B4B7F36F1B6278E00091D3D0 /* Player.swift in Sources */,
@@ -569,10 +583,12 @@
 				B4355D891B723002008C0413 /* Reachability.swift in Sources */,
 				81BA814D1A49DA1800E65899 /* LoginViewController.swift in Sources */,
 				D84CFD4B1B6E36E3005D9047 /* GameType.swift in Sources */,
+				B4B2C90D1B8793AC00CF94AB /* RoomInvite.swift in Sources */,
 				B4BA128E1B7B99DB0075F84A /* PlayerTableViewCell.swift in Sources */,
 				B4B7F3691B6278E00091D3D0 /* Bag.swift in Sources */,
 				B4B7F36D1B6278E00091D3D0 /* Hand.swift in Sources */,
 				B4BA12901B7B99EA0075F84A /* PlayersTableViewController.swift in Sources */,
+				B4B2C9111B879E3100CF94AB /* Game.swift in Sources */,
 				B4BA72711B70E1EC0001395A /* ServerCommunicator.swift in Sources */,
 				B4BA12921B7B9AD50075F84A /* PlayersDataSourceDelegate.swift in Sources */,
 				81BA814B1A49DA1800E65899 /* AppDelegate.swift in Sources */,

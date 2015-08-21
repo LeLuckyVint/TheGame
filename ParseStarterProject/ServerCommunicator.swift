@@ -112,10 +112,51 @@ class ServerCommunicator {
         }
     }
     
+    static func getRoomInvites(completionHandler: (rooms: [RoomInvite], success: Bool)->Void){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/rooms"
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": token
+        ]
+        var rooms: [RoomInvite]!
+        Alamofire.request(.GET, url, encoding: .JSON, headers: headers).responseJSON { request, response, json, _ in
+            if (response?.statusCode == 200){
+                let jsonObject = JSON(json!)
+                rooms = self.jsonParser.getRoomInvites(jsonObject)
+                completionHandler(rooms: rooms, success: true)
+            }
+            else {
+                completionHandler(rooms: [], success: false)
+            }
+        }
+    }
+    
+    static func acceptInviteToGame(roomId: Int, completionHandler: (success: Bool)->Void){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/rooms/accept/\(roomId)"
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": token
+        ]
+        Alamofire.request(.POST, url, encoding: .JSON, headers: headers)
+    }
+    
+    static func declineInviteToGame(roomId: Int, completionHandler: (success: Bool)->Void){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/rooms/decline/\(roomId)"
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": token
+        ]
+        Alamofire.request(.POST, url, encoding: .JSON, headers: headers)
+    }
+
+    
     //TODO
     static func createRoom(userId: Int, type: String, completionHandler: (success: Bool)->Void){
         let token = defaults.stringForKey("token")!
-        let url = "https://www.play-like.me/API/rest/rooms"
+        let url = "https://www.play-like.me/API/rest/rooms/invites"
         let headers = [
             "Content-Type": "application/json",
             "Authorization": token
@@ -124,16 +165,31 @@ class ServerCommunicator {
         var rooms: [Room]?
         Alamofire.request(.POST, url,parameters: parameters, encoding: .JSON, headers: headers).responseJSON { request, response, json, _ in
             if (response?.statusCode == 200){
-                
+                completionHandler(success: true)
             }
             else {
+                completionHandler(success: false)
+            }
+        }
+    }
+    
+    static func getInfoAboutPuzzleGame(gameId: Int, completionHandler: (success: Bool)->Void){
+        let token = defaults.stringForKey("token")!
+        let url = "https://www.play-like.me/API/rest/puzzle/game/\(gameId)"
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": token
+        ]
+        Alamofire.request(.GET, url, encoding: .JSON, headers: headers).responseJSON{
+            _, response, json, _ in
+            if response?.statusCode == 200{
                 
             }
         }
     }
     
     // FRIENDS METHODS
-    static func getFriendsList(completionHandler: (friends: [User]?, success: Bool)->Void){
+    static func getFriendsList(completionHandler: (friends: [User], success: Bool)->Void){
         let token = defaults.stringForKey("token")!
         let url = "https://www.play-like.me/API/rest/friends"
         let headers = [
@@ -145,7 +201,7 @@ class ServerCommunicator {
             if (response?.statusCode == 200){
                 let jsonObject = JSON(json!)
                 friends = self.jsonParser.getFriends(jsonObject)
-                completionHandler(friends: friends, success: true)
+                completionHandler(friends: friends!, success: true)
             }
             else {
                 completionHandler(friends: [], success: false)
@@ -285,7 +341,7 @@ class ServerCommunicator {
         ]
         Alamofire.request(.GET, url, encoding: .JSON, headers: headers).responseJSON{ _, response, json, _ in
             if response?.statusCode == 200{
-                let users = JSONParser.sharedInstance.getUsersFromSearch(json as! NSArray)
+                let users = JSONParser.sharedInstance.getUsersFromSearch(JSON(json!))
                 completionHandler(users: users, success: true)
             }
         }

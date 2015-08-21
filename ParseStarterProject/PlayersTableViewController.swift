@@ -21,6 +21,7 @@ class PlayersTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         segmentControl.selectedSegmentIndex = 0
+        friendsDataSource.updateFriendsList()
         friendsDataSource.controller = self
         invitesDataSource.controller = self
         
@@ -31,7 +32,7 @@ class PlayersTableViewController: UITableViewController {
         self.tableView.backgroundColor = Standart.purpleColor
         self.tableView.tableFooterView = backgroundView
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

@@ -31,4 +31,13 @@ enum GameType: String{
             return "ERROR"
         }
     }
+    
+    static func getTypeFromString(type: String) -> GameType{
+        switch type{
+            case "PUZZLE":
+                return GameType.PUZZLE
+        default:
+            return GameType.ERROR
+        }
+    }
 }
