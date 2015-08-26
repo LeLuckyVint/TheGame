@@ -8,8 +8,8 @@
 
 import Foundation
 
-let colNumber = 10
-let rowNumber = 10
+let colNumber = 15
+let rowNumber = 15
 let handNumber = 7
 class GameBoard{
     var figuresArray = Array2D<Figure>(columns: colNumber, rows: rowNumber)
@@ -58,13 +58,13 @@ class GameBoard{
             }
         }
 
-        hand[0] = Figure(type: Type.CIRCLE, color: Color.RED)
-        hand[1] = Figure(type: Type.CIRCLE, color: Color.BLUE)
-        hand[2] = Figure(type: Type.CIRCLE, color: Color.BLUE)
-        hand[3] = Figure(type: Type.CIRCLE, color: Color.BLUE)
-        hand[4] = Figure(type: Type.CIRCLE, color: Color.BLUE)
-        hand[5] = Figure(type: Type.CIRCLE, color: Color.BLUE)
-        hand[6] = Figure(type: Type.CIRCLE, color: Color.ORANGE)
+//        hand[0] = Figure(type: Type.CIRCLE, color: Color.RED)
+//        hand[1] = Figure(type: Type.CIRCLE, color: Color.BLUE)
+//        hand[2] = Figure(type: Type.CIRCLE, color: Color.BLUE)
+//        hand[3] = Figure(type: Type.CIRCLE, color: Color.BLUE)
+//        hand[4] = Figure(type: Type.CIRCLE, color: Color.BLUE)
+//        hand[5] = Figure(type: Type.CIRCLE, color: Color.BLUE)
+//        hand[6] = Figure(type: Type.CIRCLE, color: Color.ORANGE)
     }
     
     func clearCurrentMoveArray(){

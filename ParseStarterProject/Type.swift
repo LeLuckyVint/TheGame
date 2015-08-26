@@ -68,4 +68,22 @@ public enum Type{
         return ""
     }
     
+    public static func getTypeFromString(type: String) -> Type{
+        switch (type){
+            case "TRIANGLE":
+                return .TRIANGLE
+            case "CIRCLE":
+                return .CIRCLE
+            case "STAR":
+                return .STAR
+            case "CROSS":
+                return .CHRIS
+            case "MOON":
+                return .MOON
+            case "HEART":
+                return .HEART
+        default:
+            return .MOON
+        }
+    }
 }

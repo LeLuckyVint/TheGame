@@ -19,6 +19,11 @@ struct Array2D<T> {
         array = Array<T?>(count: rows*columns, repeatedValue: nil)
     }
     
+//    init(columns: Int, rows: Int, null: Bool){
+//        self.init(columns, rows)
+//        
+//    }
+    
     subscript(column: Int, row: Int) -> T? {
         get {
             return array[row*columns + column]

@@ -87,12 +87,13 @@ class ServerCommunicator {
         ]
         Alamofire.request(.GET, profileURL, headers: profileHeaders).responseJSON {
             request, response, json, _ in
+            //println(response?.statusCode)
             User.currentUser = self.jsonParser.getCurrentUser(JSON(json!))
         }
     }
     
     //ROOMS METHODS
-    static func getRooms(completionHandler: (rooms: [Room]?, success: Bool)->Void){
+    static func getRooms(completionHandler: (rooms: [Room]?, invites: [RoomInvite]?, success: Bool)->Void){
         let token = defaults.stringForKey("token")!
         let url = "https://www.play-like.me/API/rest/rooms"
         let headers = [
@@ -103,18 +104,20 @@ class ServerCommunicator {
         Alamofire.request(.GET, url, encoding: .JSON, headers: headers).responseJSON { request, response, json, _ in
             if (response?.statusCode == 200){
                 let jsonObject = JSON(json!)
-                rooms = self.jsonParser.getRooms(jsonObject)
-                completionHandler(rooms: rooms, success: true)
+                println("rooms")
+                println(json!.description)
+                let (rooms, invites) = self.jsonParser.getRooms(jsonObject)
+                completionHandler(rooms: rooms, invites: invites, success: true)
             }
             else {
-                completionHandler(rooms: nil, success: false)
+                completionHandler(rooms: nil, invites: nil, success: false)
             }
         }
     }
     
     static func getRoomInvites(completionHandler: (rooms: [RoomInvite], success: Bool)->Void){
         let token = defaults.stringForKey("token")!
-        let url = "https://www.play-like.me/API/rest/rooms"
+        let url = "https://www.play-like.me/API/rest/rooms/invites"
         let headers = [
             "Content-Type": "application/json",
             "Authorization": token
@@ -122,6 +125,8 @@ class ServerCommunicator {
         var rooms: [RoomInvite]!
         Alamofire.request(.GET, url, encoding: .JSON, headers: headers).responseJSON { request, response, json, _ in
             if (response?.statusCode == 200){
+                println("invites")
+                println(json!.description)
                 let jsonObject = JSON(json!)
                 rooms = self.jsonParser.getRoomInvites(jsonObject)
                 completionHandler(rooms: rooms, success: true)
@@ -173,7 +178,7 @@ class ServerCommunicator {
         }
     }
     
-    static func getInfoAboutPuzzleGame(gameId: Int, completionHandler: (success: Bool)->Void){
+    static func getInfoAboutPuzzleGame(gameId: Int, completionHandler: (success: Bool, game: Game?)->Void){
         let token = defaults.stringForKey("token")!
         let url = "https://www.play-like.me/API/rest/puzzle/game/\(gameId)"
         let headers = [
@@ -183,7 +188,11 @@ class ServerCommunicator {
         Alamofire.request(.GET, url, encoding: .JSON, headers: headers).responseJSON{
             _, response, json, _ in
             if response?.statusCode == 200{
-                
+                let game = JSONParser.sharedInstance.getInfoAboutPuzzleRoom(JSON(json!))
+                completionHandler(success: true, game: game)
+            }
+            else{
+                println("puzzle error")
             }
         }
     }
@@ -282,7 +291,7 @@ class ServerCommunicator {
     }
     
     //GAME METHODS
-    static func commitMove(figures: Array2D<Figure>, gameId: Int){
+    static func commitMove(figures: Array2D<Figure>, gameId: Int, completionHander: (success: Bool)->Void){
         let token = defaults.stringForKey("token")!
         let url = "https://www.play-like.me/API/rest/puzzle/commitMove/\(gameId)"
         let headers = [
@@ -301,11 +310,25 @@ class ServerCommunicator {
                 }
             }
         }
-        jsonToSend = ["moves":dict]
+        //dict = JSON(dict)
+        let js = ["moves":dict]
+        //println(js.description)
         
-        Alamofire.request(.POST, url, parameters: jsonToSend, encoding: .JSON, headers: headers).response{ _, response, json, _ in
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        request.HTTPMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(token, forHTTPHeaderField: "Authorization")
+        
+        let encoding = Alamofire.ParameterEncoding.JSON
+        let (requests, par) = encoding.encode(request, parameters: js)
+        
+//        var error: NSError?
+//        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(js, options: nil, error: &error)
+        
+        Alamofire.request(requests).responseJSON{ _, response, json, error in
+            println(error?.code)
             if response?.statusCode == 200{
-                
+                completionHander(success: true)
             }
         }
     }

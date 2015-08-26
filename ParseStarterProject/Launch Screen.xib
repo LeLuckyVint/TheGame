@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
@@ -11,9 +11,9 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="9aj-rQ-bAz">
-                    <rect key="frame" x="115" y="165" width="250" height="200"/>
+                    <rect key="frame" x="140" y="140" width="200" height="200"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="250" id="rOo-v0-b8T"/>
+                        <constraint firstAttribute="width" constant="200" id="rOo-v0-b8T"/>
                         <constraint firstAttribute="height" constant="200" id="z2n-PP-2Bn"/>
                     </constraints>
                 </imageView>
@@ -21,7 +21,7 @@
             <color key="backgroundColor" red="0.4823529412" green="0.1215686275" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="9aj-rQ-bAz" firstAttribute="centerX" secondItem="zAn-Au-lLb" secondAttribute="centerX" id="2Wc-Gf-9ZB"/>
-                <constraint firstItem="9aj-rQ-bAz" firstAttribute="centerY" secondItem="zAn-Au-lLb" secondAttribute="centerY" constant="25" id="Cks-T2-8vt"/>
+                <constraint firstItem="9aj-rQ-bAz" firstAttribute="centerY" secondItem="zAn-Au-lLb" secondAttribute="centerY" id="Cks-T2-8vt"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -29,6 +29,6 @@
         </view>
     </objects>
     <resources>
-        <image name="logo" width="666" height="666"/>
+        <image name="logo" width="2000" height="2000"/>
     </resources>
 </document>

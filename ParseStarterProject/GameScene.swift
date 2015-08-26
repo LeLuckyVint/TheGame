@@ -11,8 +11,8 @@ import SpriteKit
 class GameScene: SKScene {
     
     var gameBoard: GameBoard!
-    let TileWidth: CGFloat = 30.0
-    let TileHeight: CGFloat = 30.0
+    let TileWidth: CGFloat = 20.0
+    let TileHeight: CGFloat = 20.0
     
     let gameLayer = SKNode()
     let cameraNode = SKNode()
@@ -344,11 +344,17 @@ class GameScene: SKScene {
         figuresLayer.removeAllChildren()
         handLayer.removeAllChildren()
     }
+    func clearHandLayer(){
+        handLayer.removeAllChildren()
+    }
     
     func commitMove(){
+        figuresLayer.removeAllChildren()
         addFiguresToGeneralArray()
-        gameBoard.moveHandFiguresToRight()
-        gameBoard.takeFiguresToHand()
+
+        addSpritesForFigures(gameBoard.figuresArray)
+        //gameBoard.moveHandFiguresToRight()
+       // gameBoard.takeFiguresToHand()
     }
     
     func addFiguresToGeneralArray(){

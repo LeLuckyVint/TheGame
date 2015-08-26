@@ -55,8 +55,8 @@ class PlayersDataSourceDelegate: NSObject, UITableViewDataSource, UITableViewDel
                 success in
                 let ac = UIAlertController.createAlertViewWithTitle("Success!", message: "Wait til your friend accept the game")
                 var vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("roomsViewController") as! RoomsTableViewController
-                self.controller.presentViewController(vc, animated: true, completion: nil)
-                vc.presentViewController(ac, animated: true, completion: nil)
+                //self.controller.presentViewController(vc, animated: true, completion: nil)
+                //vc.presentViewController(ac, animated: true, completion: nil)
                 
             }
         }

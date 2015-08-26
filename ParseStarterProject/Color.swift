@@ -68,4 +68,24 @@ public enum Color{
         }
         return ""
     }
+    
+    public static func getTypeFromString(type: String) -> Color{
+        switch (type){
+        case "RED":
+            return .RED
+        case "BLUE":
+            return .BLUE
+        case "PINK":
+            return .PINK
+        case "ORANGE":
+            return .ORANGE
+        case "CYAN":
+            return .CYAN
+        case "YELLOW":
+            return .YELLOW
+        default:
+            return .RED
+        }
+    }
+
 }

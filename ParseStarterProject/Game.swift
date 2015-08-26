@@ -8,22 +8,24 @@
 
 import Foundation
 
-class Game: Room{
+class Game{
     var ended: Bool
     var locked: Bool
     var size: Int
     var figures: Array2D<Figure>
     //var bonuses: Array
-    var hand: [Figure]
+    var hand: [Figure?]
     var currentPlayerId: Int
+    var gameId: Int
     
-    init(ended: Bool, locked: Bool, size: Int, figures: Array2D<Figure>, hand: [Figure], currentPlayerId: Int){
-        super.init(id: super.id, creator: super.creator, gameId: super.id, players: super.players, type: super.type)
+    init(ended: Bool, locked: Bool, size: Int, figures: Array2D<Figure>, hand: [Figure?], currentPlayerId: Int, gameId: Int){
+        //super.init(id: id, creator: creator, gameId: id, players: players, type: type)
         self.ended = ended
         self.locked = locked
         self.size = size
         self.figures = figures
         self.hand = hand
         self.currentPlayerId = currentPlayerId
+        self.gameId = gameId
     }
 }

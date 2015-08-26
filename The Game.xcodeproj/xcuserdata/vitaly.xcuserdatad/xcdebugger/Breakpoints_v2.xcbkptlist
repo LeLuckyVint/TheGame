@@ -6,32 +6,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../Downloads/SwiftHTTP-master/HTTPRequestSerializer.swift"
-            timestampString = "459549956.629082"
+            filePath = "ParseStarterProject/RoomsTableViewController.swift"
+            timestampString = "461935475.750146"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
-            landmarkName = "createRequest(_:method:parameters:)"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ParseStarterProject/SignUpViewController.swift"
-            timestampString = "460207026.995698"
+            filePath = "ParseStarterProject/GameViewController.swift"
+            timestampString = "461937062.229723"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "register(_:)"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "commitMove(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

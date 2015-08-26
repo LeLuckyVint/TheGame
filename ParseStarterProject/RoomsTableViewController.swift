@@ -14,8 +14,10 @@ class RoomsTableViewController: UITableViewController {
     
     var rooms = [Room]()
     var invites = [RoomInvite]()
-    let games = [GameType.PUZZLE]
+    var enteredRooms = [RoomInvite]()
     
+    let games = [GameType.PUZZLE]
+    var game: Game!
     let reachability = Reachability.reachabilityForInternetConnection()
     
     override func viewDidLoad() {
@@ -35,15 +37,21 @@ class RoomsTableViewController: UITableViewController {
                 array, success in
                 if success{
                     self.invites = array
+                    self.tableView?.reloadData()
                 }
             }
             ServerCommunicator.getRooms(){
-                array, success in
+                array, invitesArr, success in
                 if success{
                     self.rooms = array!
+                    println("rooms \(self.rooms.count)")
+                    self.tableView.reloadData()
+                    self.enteredRooms = invitesArr!
+                    println("enteredRooms \(self.enteredRooms.count)")
+                    self.tableView?.reloadData()
                 }
-                self.tableView?.reloadData()
             }
+            //self.tableView?.reloadData()
         }
         else{
             Reachability.showAlert(self)
@@ -61,18 +69,18 @@ class RoomsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return rooms.count + invites.count + 1
+        return rooms.count + invites.count + enteredRooms.count + 1
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row == rooms.count + invites.count{
+        if indexPath.row == rooms.count + invites.count + enteredRooms.count{
             var cell = tableView.dequeueReusableCellWithIdentifier("newRoomCell", forIndexPath: indexPath) as! NewRoomTableViewCell
             return cell
         }
-        else if indexPath.row >= invites.count && indexPath.row < rooms.count + invites.count{
+        else if indexPath.row >= invites.count + enteredRooms.count && indexPath.row < rooms.count + invites.count + enteredRooms.count && rooms.count != 0{
             var cell = tableView.dequeueReusableCellWithIdentifier("roomCell", forIndexPath: indexPath) as! RoomTableViewCell
             // Configure the cell
-            let room = rooms[indexPath.row]
+            let room = rooms[indexPath.row - enteredRooms.count - invites.count]
             let opponent = Player.getOpponent(room.players)
             let you = Player.getYourself(room.players)
             
@@ -87,7 +95,16 @@ class RoomsTableViewController: UITableViewController {
             cell.opponentScoreLabel.text = "\(opponent.score)"
             
             return cell
-
+        }
+        else if indexPath.row >= invites.count && indexPath.row < rooms.count + invites.count && enteredRooms.count != 0{
+            var cell = tableView.dequeueReusableCellWithIdentifier("enteredRoomCell", forIndexPath: indexPath) as! EnteredRoomTableViewCell
+            
+            let invite = enteredRooms[indexPath.row - invites.count]
+            
+            cell.usernameLabel.text = invite.creator.username
+            cell.avatarImageView.image = UIImage(data: NSData(contentsOfURL: invite.creator.avatarURL!)!)
+            cell.roomId = invite.id
+            return cell
         }
         else{
             var cell = tableView.dequeueReusableCellWithIdentifier("roomInviteCell", forIndexPath: indexPath) as! RoomInviteTableViewCell
@@ -100,6 +117,7 @@ class RoomsTableViewController: UITableViewController {
             return cell
         }
     }
+    
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 200
     }
@@ -107,14 +125,24 @@ class RoomsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if reachability.isReachable(){
             //If tapped add new game button
-            if indexPath.row == rooms.count{
+            if indexPath.row == rooms.count + enteredRooms.count + invites.count{
                 self.performSegueWithIdentifier("showGames", sender: self)
             }
                 //tapped room
-            else if indexPath.row >= invites.count && indexPath.row < rooms.count + invites.count{
-                ServerCommunicator.ge
+            else if indexPath.row >= invites.count + enteredRooms.count && indexPath.row < rooms.count + invites.count + enteredRooms.count && rooms.count != 0{
+                let room = rooms[indexPath.row - invites.count - enteredRooms.count]
+                ServerCommunicator.getInfoAboutPuzzleGame(room.gameId){
+                    success, game in
+                    if success{
+                        self.game = game!
+                        self.performSegueWithIdentifier("startGame", sender: nil)
+                    }
+                }
             }
                 //Tapped invite to room
+            else if indexPath.row >= invites.count && indexPath.row < rooms.count + invites.count && enteredRooms.count != 0{
+                
+            }
             else{
                 
             }
@@ -122,6 +150,12 @@ class RoomsTableViewController: UITableViewController {
             //If internet is OFF
         else{
             Reachability.showAlert(self)
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let destination = segue.destinationViewController as? GameViewController{
+            destination.game = self.game
         }
         
     }

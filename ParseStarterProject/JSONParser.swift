@@ -12,8 +12,9 @@ import SwiftyJSON
 class JSONParser {
     static let sharedInstance = JSONParser()
     
-    func getRooms(json: JSON) -> [Room]{
+    func getRooms(json: JSON) -> (rooms: [Room], enteredInvites: [RoomInvite]){
         var rooms:[Room] = []
+        var invites: [RoomInvite] = []
         let roomsJSONArray = json.arrayValue
         for room in roomsJSONArray{
             let roomId = room["roomId"].int!
@@ -23,31 +24,34 @@ class JSONParser {
             let creatorUsername = creator["username"].string!
             let creatorAvatar = creator["avatar"].object as? NSURL
             let creatorEntity = User(id: creatorId, username: creatorUsername, avatar: creatorAvatar)
-            
-            let gameId = room["gameId"].int!
-            
-            var players = room["players"].array!
-            var playersEntities:[Player] = []
-            
-            for player in players{
-                let score = player["score"].intValue
-                let skippedMoveNumber = player["skippedMoveNumber"].intValue
-                
-                let user = player["user"]
-                let userId = user["id"].intValue
-                let userUsername = user["username"].stringValue
-                let userAvatar = user["avatar"].object as? NSURL
-                let userEntity = User(id: userId, username: userUsername, avatar: userAvatar)
-                
-                let playerEntity = Player(user: userEntity, score: score, skippedMoveNumber: skippedMoveNumber)
-                playersEntities.append(playerEntity)
-            }
             let type = room["type"].string!.toGameType()
             
-            let roomEntity = Room(id: roomId, creator: creatorEntity, gameId: gameId, players: playersEntities, type: type)
-            rooms.append(roomEntity)
+            if let gameId = room["gameId"].int{
+                
+                var players = room["players"].array!
+                var playersEntities:[Player] = []
+                
+                for player in players{
+                    let score = player["score"].intValue
+                    let skippedMoveNumber = player["skippedMoveNumber"].intValue
+                    
+                    let user = player["user"]
+                    let userId = user["id"].intValue
+                    let userUsername = user["username"].stringValue
+                    let userAvatar = user["avatar"].object as? NSURL
+                    let userEntity = User(id: userId, username: userUsername, avatar: userAvatar)
+                    
+                    let playerEntity = Player(user: userEntity, score: score, skippedMoveNumber: skippedMoveNumber)
+                    playersEntities.append(playerEntity)
+                }
+                    let roomEntity = Room(id: roomId, creator: creatorEntity, gameId: gameId, players: playersEntities, type: type)
+                    rooms.append(roomEntity)
+            }
+            else{
+                invites.append(RoomInvite(id: roomId, creator: creatorEntity, type: type))
+            }
         }
-        return rooms
+        return (rooms: rooms, enteredInvites: invites)
     }
     
     func getRoomInvites(json: JSON) -> [RoomInvite]{
@@ -75,6 +79,7 @@ class JSONParser {
     }
     
     func getInfoAboutPuzzleRoom(json: JSON) -> Game{
+        println(json.description)
         let gameId = json["gameId"].intValue
         let size = json["size"].intValue
         let ended = json["ended"].boolValue
@@ -97,10 +102,32 @@ class JSONParser {
             playersEntities.append(playerEntity)
         }
         
-        var figures = json["figures"].arrayValue
-        var playersEntities:[Figure] = []
+        var figures = json["figures"].dictionaryValue
+        var figuressEntities = Array2D<Figure>(columns: size, rows: size)
+        
+        for figure in figures{
+            let coord = figure.0.toInt()
+            let figurejson = figure.1
+            let fig = Figure(type: Type.getTypeFromString(figurejson["type"].stringValue), color: Color.getTypeFromString(figurejson["color"].stringValue))
+            let row = Int(coord!/size)
+            let col = coord! - row*size - 1
+            figuressEntities[col, row] = fig
+        }
         
         for player in players{
+            
+        }
+        
+        var handArray = json["hand"].arrayValue
+        var hand: [Figure?] = []
+        for handJson in handArray{
+            let type = Type.getTypeFromString(handJson["type"].stringValue)
+            let color = Color.getTypeFromString(handJson["color"].stringValue)
+            hand.append(Figure(type: type, color: color))
+        }
+        
+        let currentPlayer = json["currentPlayer"].intValue
+        return Game(ended: ended, locked: locked, size: size, figures: figuressEntities, hand: hand, currentPlayerId: currentPlayer, gameId: gameId)
         
     }
     
@@ -177,5 +204,5 @@ extension String{
             return GameType.ERROR
         }
     }
-        
+    
 }
