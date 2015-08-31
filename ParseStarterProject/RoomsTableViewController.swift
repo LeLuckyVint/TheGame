@@ -44,10 +44,8 @@ class RoomsTableViewController: UITableViewController {
                 array, invitesArr, success in
                 if success{
                     self.rooms = array!
-                    println("rooms \(self.rooms.count)")
                     self.tableView.reloadData()
                     self.enteredRooms = invitesArr!
-                    println("enteredRooms \(self.enteredRooms.count)")
                     self.tableView?.reloadData()
                 }
             }

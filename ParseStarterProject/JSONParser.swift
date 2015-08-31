@@ -79,7 +79,6 @@ class JSONParser {
     }
     
     func getInfoAboutPuzzleRoom(json: JSON) -> Game{
-        println(json.description)
         let gameId = json["gameId"].intValue
         let size = json["size"].intValue
         let ended = json["ended"].boolValue

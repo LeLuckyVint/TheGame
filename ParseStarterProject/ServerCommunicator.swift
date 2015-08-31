@@ -104,8 +104,6 @@ class ServerCommunicator {
         Alamofire.request(.GET, url, encoding: .JSON, headers: headers).responseJSON { request, response, json, _ in
             if (response?.statusCode == 200){
                 let jsonObject = JSON(json!)
-                println("rooms")
-                println(json!.description)
                 let (rooms, invites) = self.jsonParser.getRooms(jsonObject)
                 completionHandler(rooms: rooms, invites: invites, success: true)
             }
@@ -125,8 +123,6 @@ class ServerCommunicator {
         var rooms: [RoomInvite]!
         Alamofire.request(.GET, url, encoding: .JSON, headers: headers).responseJSON { request, response, json, _ in
             if (response?.statusCode == 200){
-                println("invites")
-                println(json!.description)
                 let jsonObject = JSON(json!)
                 rooms = self.jsonParser.getRoomInvites(jsonObject)
                 completionHandler(rooms: rooms, success: true)
@@ -169,6 +165,8 @@ class ServerCommunicator {
         let parameters = ["users":[userId], "type": type, "playersNumber": 2] as [String : AnyObject]
         var rooms: [Room]?
         Alamofire.request(.POST, url,parameters: parameters, encoding: .JSON, headers: headers).responseJSON { request, response, json, _ in
+            let g = NSJSONSerialization.JSONObjectWithData(request.HTTPBody!, options: nil, error: nil)
+            println(g!)
             if (response?.statusCode == 200){
                 completionHandler(success: true)
             }
@@ -298,7 +296,44 @@ class ServerCommunicator {
             "Content-Type": "application/json",
             "Authorization": token
         ]
-        var jsonToSend = Dictionary<String, AnyObject>()
+//        var jsonToSend = Dictionary<String, AnyObject>()
+//        var dict = [Dictionary<String, AnyObject>]()
+//        for column in 0..<colNumber{
+//            for row in 0..<rowNumber{
+//                let figure = figures[column, row]
+//                if figure != nil{
+//                    let jsonFigure = ["type":figure!.getType().stringForServer, "color":figure!.getColor().stringForServer]
+//                    let json = ["figure": jsonFigure, "column":column, "row":row]
+//                    dict.append(json as! Dictionary<String, AnyObject>)
+//                }
+//            }
+//        }
+//        //dict = JSON(dict)
+//        let js:Dictionary<String, AnyObject>  = ["moves":dict]
+//        //println(js.description)
+//        
+//        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+//        request.HTTPMethod = "POST"
+//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.setValue(token, forHTTPHeaderField: "Authorization")
+//        
+//        let encoding = Alamofire.ParameterEncoding.JSON
+//        let (requests, par) = encoding.encode(request, parameters: js)
+//    
+////        var error: NSError?
+////        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(js, options: nil, error: &error)
+//        
+//        Alamofire.request(requests).responseJSON{ request, response, json, error in
+//            let g = NSJSONSerialization.JSONObjectWithData(request.HTTPBody!, options: nil, error: nil)
+//            println(g!)
+//            println(error?.code)
+//            println(response?.statusCode)
+//            if response?.statusCode == 200{
+//                completionHander(success: true)
+//            }
+//        }
+        
+        //var jsonToSend = Dictionary<String, AnyObject>()
         var dict = [Dictionary<String, AnyObject>]()
         for column in 0..<colNumber{
             for row in 0..<rowNumber{
@@ -310,25 +345,20 @@ class ServerCommunicator {
                 }
             }
         }
-        //dict = JSON(dict)
-        let js = ["moves":dict]
-        //println(js.description)
+        let jsonToSend = ["moves" : dict]
+        let parameters = [
+            "foo": [1,2,3],
+            "bar": [
+                "baz": "qux"
+            ]
+        ]
         
-        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
-        request.HTTPMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(token, forHTTPHeaderField: "Authorization")
-        
-        let encoding = Alamofire.ParameterEncoding.JSON
-        let (requests, par) = encoding.encode(request, parameters: js)
-        
-//        var error: NSError?
-//        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(js, options: nil, error: &error)
-        
-        Alamofire.request(requests).responseJSON{ _, response, json, error in
+        Alamofire.request(.POST, url, parameters: parameters as! Dictionary<String, AnyObject>, encoding: .JSON, headers: headers).responseJSON{ request, response, json, error in
+            let g = NSJSONSerialization.JSONObjectWithData(request.HTTPBody!, options: nil, error: nil)
+            println(g!)
             println(error?.code)
             if response?.statusCode == 200{
-                completionHander(success: true)
+                
             }
         }
     }
