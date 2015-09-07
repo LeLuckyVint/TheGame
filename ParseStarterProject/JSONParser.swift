@@ -109,7 +109,7 @@ class JSONParser {
             let figurejson = figure.1
             let fig = Figure(type: Type.getTypeFromString(figurejson["type"].stringValue), color: Color.getTypeFromString(figurejson["color"].stringValue))
             let row = Int(coord!/size)
-            let col = coord! - row*size - 1
+            let col = coord! - row*size
             figuressEntities[col, row] = fig
         }
         

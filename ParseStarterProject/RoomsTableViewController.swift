@@ -112,6 +112,7 @@ class RoomsTableViewController: UITableViewController {
             cell.usernameLabel.text = invite.creator.username
             cell.avatarImageView.image = UIImage(data: NSData(contentsOfURL: invite.creator.avatarURL!)!)
             cell.roomId = invite.id
+            cell.vc = self
             return cell
         }
     }

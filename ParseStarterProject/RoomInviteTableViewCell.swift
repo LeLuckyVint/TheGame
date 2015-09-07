@@ -9,7 +9,8 @@
 import UIKit
 
 class RoomInviteTableViewCell: UITableViewCell {
-
+    
+    var vc: RoomsTableViewController!
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var gameImageView: UIImageView!
@@ -28,11 +29,14 @@ class RoomInviteTableViewCell: UITableViewCell {
     @IBAction func accept(sender: UIButton) {
         ServerCommunicator.acceptInviteToGame(roomId!){
             success in
-            
+            self.vc.tableView.reloadData()
         }
     }
     
     @IBAction func decline(sender: UIButton) {
-        ServerCommunicator.declineInviteFromUserWithId(roomId!)
+        ServerCommunicator.declineInviteToGame(roomId!){
+            success in
+            self.vc.tableView.reloadData()
+        }
     }
 }

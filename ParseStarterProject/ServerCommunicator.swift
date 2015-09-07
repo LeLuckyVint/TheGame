@@ -157,7 +157,7 @@ class ServerCommunicator {
     //TODO
     static func createRoom(userId: Int, type: String, completionHandler: (success: Bool)->Void){
         let token = defaults.stringForKey("token")!
-        let url = "https://www.play-like.me/API/rest/rooms/invites"
+        let url = "https://www.play-like.me/API/rest/rooms"
         let headers = [
             "Content-Type": "application/json",
             "Authorization": token
@@ -340,23 +340,19 @@ class ServerCommunicator {
                 let figure = figures[column, row]
                 if figure != nil{
                     let jsonFigure = ["type":figure!.getType().stringForServer, "color":figure!.getColor().stringForServer]
-                    let json = ["figure": jsonFigure, "column":column, "row":row]
+                    let cell = row * colNumber + column
+                    let json = ["figure": jsonFigure, "cell": cell]
                     dict.append(json as! Dictionary<String, AnyObject>)
                 }
             }
         }
         let jsonToSend = ["moves" : dict]
-        let parameters = [
-            "foo": [1,2,3],
-            "bar": [
-                "baz": "qux"
-            ]
-        ]
         
-        Alamofire.request(.POST, url, parameters: parameters as! Dictionary<String, AnyObject>, encoding: .JSON, headers: headers).responseJSON{ request, response, json, error in
+        Alamofire.request(.POST, url, parameters: jsonToSend, encoding: .JSON, headers: headers).responseJSON{ request, response, json, error in
             let g = NSJSONSerialization.JSONObjectWithData(request.HTTPBody!, options: nil, error: nil)
             println(g!)
             println(error?.code)
+            println(response?.statusCode)
             if response?.statusCode == 200{
                 
             }
