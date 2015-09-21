@@ -27,8 +27,9 @@ extension SKNode {
 
 class GameViewController: UIViewController {
     
-    @IBOutlet weak var commitMoveButton: UIButton!
-    @IBOutlet weak var refreshButton: UIButton!
+    @IBOutlet weak var skipButton: UIButton!
+    @IBOutlet weak var commitButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
     
     var scene: GameScene!
     var gameBoard: GameBoard!
@@ -59,7 +60,32 @@ class GameViewController: UIViewController {
             scene.addFiguresForHand(gameBoard.hand)
             scene.addTilesForHand()
         }
+        skipButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        skipButton.setImage(UIImage(named: "propustit"), forState: UIControlState.Normal)
         
+        commitButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        commitButton.setImage(UIImage(named: "galochka"), forState: UIControlState.Normal)
+        
+        cancelButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        cancelButton.setImage(UIImage(named: "krestik"), forState: UIControlState.Normal)
+        //layoutForButton(skipButton)
+        //layoutForButton(cancelButton)
+        //layoutForButton(commitButton)
+    }
+    
+    func layoutForButton(button: UIButton){
+        // the space between the image and text
+        var spacing: CGFloat = 6.0;
+        
+        // lower the text and push it left so it appears centered
+        //  below the image
+        let imageSize = button.imageView!.frame.size;
+        button.titleEdgeInsets = UIEdgeInsetsMake(0.0, -imageSize.width, spacing - imageSize.height, 0.0)
+        
+        // raise the image and push it right so it appears centered
+        //  above the text
+        let titleSize = button.titleLabel!.frame.size;
+        button.imageEdgeInsets = UIEdgeInsetsMake(-(titleSize.height + spacing), 0.0, 0.0, -titleSize.width)
     }
     
     override func shouldAutorotate() -> Bool {
@@ -83,7 +109,7 @@ class GameViewController: UIViewController {
         return true
     }
     
-    @IBAction func redrawBoard(sender: UIButton) {
+    @IBAction func skipMove(sender: UIButton) {
         ServerCommunicator.getInfoAboutPuzzleGame(game.gameId){
             success, game in
             self.game = game
@@ -97,7 +123,6 @@ class GameViewController: UIViewController {
                 self.scene.addTilesForHand()
             }
         }
-        
     }
     
     @IBAction func commitMove(sender: UIButton) {
@@ -115,3 +140,4 @@ class GameViewController: UIViewController {
     }
     
 }
+

@@ -54,7 +54,7 @@ public class Figure{
         case 0: color = .RED
         case 1: color = .BLUE
         case 2: color = .YELLOW
-        case 3: color = .CYAN
+        case 3: color = .GREY
         case 4: color = .PINK
         case 5: color = .ORANGE
         default:
@@ -64,7 +64,7 @@ public class Figure{
         switch(randType){
         case 0: type = .MOON
         case 1: type = .CIRCLE
-        case 2: type = .CHRIS
+        case 2: type = .CROSS
         case 3: type = .TRIANGLE
         case 4: type = .STAR
         case 5: type = .HEART

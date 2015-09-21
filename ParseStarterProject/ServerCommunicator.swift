@@ -347,11 +347,9 @@ class ServerCommunicator {
             }
         }
         let jsonToSend = ["moves" : dict]
-        
+
         Alamofire.request(.POST, url, parameters: jsonToSend, encoding: .JSON, headers: headers).responseJSON{ request, response, json, error in
-            let g = NSJSONSerialization.JSONObjectWithData(request.HTTPBody!, options: nil, error: nil)
-            println(g!)
-            println(error?.code)
+            println(json?.description)
             println(response?.statusCode)
             if response?.statusCode == 200{
                 

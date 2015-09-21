@@ -12,7 +12,7 @@ public enum Type{
     case TRIANGLE
     case CIRCLE
     case STAR
-    case CHRIS
+    case CROSS
     case MOON
     case HEART
     
@@ -35,7 +35,7 @@ public enum Type{
         if self == .STAR{
             return "Star"
         }
-        if self == .CHRIS{
+        if self == .CROSS{
             return "Chris"
         }
         if self == .MOON{
@@ -56,7 +56,7 @@ public enum Type{
         if self == .STAR{
             return "STAR"
         }
-        if self == .CHRIS{
+        if self == .CROSS{
             return "CROSS"
         }
         if self == .MOON{
@@ -77,7 +77,7 @@ public enum Type{
             case "STAR":
                 return .STAR
             case "CROSS":
-                return .CHRIS
+                return .CROSS
             case "MOON":
                 return .MOON
             case "HEART":

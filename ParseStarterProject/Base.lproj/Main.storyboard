@@ -677,31 +677,78 @@
                         <viewControllerLayoutGuide type="bottom" id="3n7-3t-n05"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Nqp-CN-AKt" customClass="SKView">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tabBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="scN-ca-p0B">
-                                <rect key="frame" x="0.0" y="551" width="600" height="49"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ErG-Hp-ZpN">
+                                <rect key="frame" x="0.0" y="550" width="600" height="50"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7xe-do-2D9">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="50"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                        <state key="normal" image="propustit">
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="skipMove:" destination="cCE-A1-j4E" eventType="touchUpInside" id="QPh-i4-YUF"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ty-mx-apB">
+                                        <rect key="frame" x="400" y="0.0" width="200" height="50"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                        <state key="normal" image="krestik">
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S96-rh-Q0w">
+                                        <rect key="frame" x="200" y="0.0" width="200" height="50"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                        <state key="normal" image="galochka">
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="commitMove:" destination="cCE-A1-j4E" eventType="touchUpInside" id="doM-VW-ZEC"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <items>
-                                    <tabBarItem title="Пропустить" selectedImage="propustit" id="9P1-rf-uDV"/>
-                                    <tabBarItem title="Подтвердить" selectedImage="galochka" id="xDq-3n-6GD"/>
-                                    <tabBarItem title="Отменить" selectedImage="krestik" id="v5B-uj-RzO"/>
-                                </items>
-                                <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </tabBar>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="5Ty-mx-apB" secondAttribute="bottom" id="7zO-sA-bph"/>
+                                    <constraint firstAttribute="trailing" secondItem="5Ty-mx-apB" secondAttribute="trailing" id="87h-46-MZd"/>
+                                    <constraint firstItem="S96-rh-Q0w" firstAttribute="leading" secondItem="7xe-do-2D9" secondAttribute="trailing" id="CjW-3d-EOQ"/>
+                                    <constraint firstItem="5Ty-mx-apB" firstAttribute="leading" secondItem="S96-rh-Q0w" secondAttribute="trailing" id="FEU-lF-Z1a"/>
+                                    <constraint firstItem="7xe-do-2D9" firstAttribute="top" secondItem="ErG-Hp-ZpN" secondAttribute="top" id="P2h-yy-F43"/>
+                                    <constraint firstAttribute="bottom" secondItem="S96-rh-Q0w" secondAttribute="bottom" id="Qnu-aP-ISb"/>
+                                    <constraint firstAttribute="bottom" secondItem="7xe-do-2D9" secondAttribute="bottom" id="W0d-mb-zyE"/>
+                                    <constraint firstItem="7xe-do-2D9" firstAttribute="leading" secondItem="ErG-Hp-ZpN" secondAttribute="leading" id="XJy-TL-8ZN"/>
+                                    <constraint firstItem="5Ty-mx-apB" firstAttribute="top" secondItem="ErG-Hp-ZpN" secondAttribute="top" id="fx9-3z-avN"/>
+                                    <constraint firstAttribute="height" constant="50" id="oEE-gh-JdN"/>
+                                    <constraint firstItem="S96-rh-Q0w" firstAttribute="top" secondItem="ErG-Hp-ZpN" secondAttribute="top" id="r5a-7C-NMp"/>
+                                    <constraint firstItem="7xe-do-2D9" firstAttribute="width" secondItem="S96-rh-Q0w" secondAttribute="width" id="rcS-dv-VJR"/>
+                                    <constraint firstItem="5Ty-mx-apB" firstAttribute="width" secondItem="S96-rh-Q0w" secondAttribute="width" id="rlu-H3-qpa"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="scN-ca-p0B" firstAttribute="leading" secondItem="Nqp-CN-AKt" secondAttribute="leading" id="2au-2T-mWi"/>
-                            <constraint firstItem="3n7-3t-n05" firstAttribute="top" secondItem="scN-ca-p0B" secondAttribute="bottom" id="d3T-yR-0Nn"/>
-                            <constraint firstAttribute="trailing" secondItem="scN-ca-p0B" secondAttribute="trailing" id="j2P-eJ-mxD"/>
+                            <constraint firstItem="3n7-3t-n05" firstAttribute="top" secondItem="ErG-Hp-ZpN" secondAttribute="bottom" id="WxI-9D-dSw"/>
+                            <constraint firstAttribute="trailing" secondItem="ErG-Hp-ZpN" secondAttribute="trailing" id="Z48-g8-wUk"/>
+                            <constraint firstItem="ErG-Hp-ZpN" firstAttribute="leading" secondItem="Nqp-CN-AKt" secondAttribute="leading" id="com-85-TZC"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <connections>
+                        <outlet property="cancelButton" destination="5Ty-mx-apB" id="uBW-G9-PX9"/>
+                        <outlet property="commitButton" destination="S96-rh-Q0w" id="POh-ig-fwe"/>
+                        <outlet property="skipButton" destination="7xe-do-2D9" id="8X5-D2-j5Z"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hob-Jo-TwM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2454" y="1959"/>
+            <point key="canvasLocation" x="2454" y="2111"/>
         </scene>
         <!--Players Table View Controller-->
         <scene sceneID="7Og-tT-YB5">

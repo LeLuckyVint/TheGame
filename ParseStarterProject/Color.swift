@@ -13,8 +13,7 @@ public enum Color{
     case PINK
     case ORANGE
     case YELLOW
-    case CYAN
-    //case GRAY
+    case GREY
     
     public static var size = 6
 //    public static final var unicode: [String] = [
@@ -38,8 +37,8 @@ public enum Color{
         if self == .ORANGE{
             return "orange"
         }
-        if self == .CYAN{
-            return "cyan"
+        if self == .GREY{
+            return "grey"
         }
         if self == .YELLOW{
             return "yellow"
@@ -60,8 +59,8 @@ public enum Color{
         if self == .ORANGE{
             return "ORANGE"
         }
-        if self == .CYAN{
-            return "CYAN"
+        if self == .GREY{
+            return "GREY"
         }
         if self == .YELLOW{
             return "YELLOW"
@@ -79,8 +78,8 @@ public enum Color{
             return .PINK
         case "ORANGE":
             return .ORANGE
-        case "CYAN":
-            return .CYAN
+        case "GREY":
+            return .GREY
         case "YELLOW":
             return .YELLOW
         default:
