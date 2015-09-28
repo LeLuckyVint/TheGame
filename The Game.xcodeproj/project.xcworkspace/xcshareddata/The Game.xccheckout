@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>051C1D34-C330-45C6-BEED-A5D1F6CA98AA</string>
+	<key>IDESourceControlProjectName</key>
+	<string>The Game</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>B7EF40E4BB4D9941274630F528227A85411453F4</key>
+		<string>https://github.com/LeLuckyVint/TheGame</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>The Game.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>B7EF40E4BB4D9941274630F528227A85411453F4</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/LeLuckyVint/TheGame</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>B7EF40E4BB4D9941274630F528227A85411453F4</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>B7EF40E4BB4D9941274630F528227A85411453F4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>TheGame</string>
+		</dict>
+	</array>
+</dict>
+</plist>

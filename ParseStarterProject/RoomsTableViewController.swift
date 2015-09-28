@@ -89,7 +89,7 @@ class RoomsTableViewController: UITableViewController {
                 cell.avatarImageView.image = UIImage(named: "no_user")
             }
             cell.usernameLabel.text = opponent.user.username
-            cell.yourScoreLabel.text = "\(you.score)"
+            cell.yourScoreLabel.text = "\(you.score) -"
             cell.opponentScoreLabel.text = "\(opponent.score)"
             
             return cell
@@ -118,7 +118,7 @@ class RoomsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 200
+        return 100
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {

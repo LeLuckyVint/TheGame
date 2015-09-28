@@ -20,7 +20,12 @@ class RoomTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        avatarImageView.layer.borderWidth=1.0
+        avatarImageView.layer.masksToBounds = false
+        avatarImageView.layer.borderColor = UIColor.whiteColor().CGColor
+        avatarImageView.layer.cornerRadius = 13
+        avatarImageView.layer.cornerRadius = avatarImageView.frame.size.height/2
+        avatarImageView.clipsToBounds = true
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

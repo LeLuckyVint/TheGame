@@ -16,11 +16,10 @@ class PlayersTableViewController: UITableViewController {
 
     let friendsDataSource = PlayersDataSourceDelegate()
     let invitesDataSource = InvitesDataSourceDelegate()
-    @IBOutlet weak var segmentControl: UISegmentedControl!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        segmentControl.selectedSegmentIndex = 0
         friendsDataSource.updateFriendsList()
         friendsDataSource.controller = self
         invitesDataSource.controller = self

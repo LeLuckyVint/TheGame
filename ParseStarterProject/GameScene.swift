@@ -72,7 +72,6 @@ class GameScene: SKScene {
     
     override func didSimulatePhysics() {
         super.didSimulatePhysics()
-        centerOnNode(self.)
     }
     
     func centerOnNode(node: SKNode){

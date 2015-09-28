@@ -40,7 +40,7 @@ class GamesTableViewController: UITableViewController {
         
         cell.type = games[indexPath.row]
         cell.gameNameLabel.text = games[indexPath.row].rawValue
-        cell.backgroundColor = games[indexPath.row].getColor()
+        //cell.backgroundColor = games[indexPath.row].getColor()
         return cell
     }
     
