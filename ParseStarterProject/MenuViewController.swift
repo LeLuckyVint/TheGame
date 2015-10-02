@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MaterialKit
 
 class MenuViewController: UITableViewController {
     
@@ -15,6 +16,9 @@ class MenuViewController: UITableViewController {
     @IBOutlet var menuTableView: UITableView!
     
     @IBOutlet weak var profileCell: UITableViewCell!
+    @IBOutlet weak var friendsCell: MKTableViewCell!
+    @IBOutlet weak var gamesCell: MKTableViewCell!
+    @IBOutlet weak var invitesCell: MKTableViewCell!
     @IBOutlet weak var settingsCell: UITableViewCell!
     
     @IBOutlet weak var orderLabel: UILabel!
@@ -47,12 +51,15 @@ class MenuViewController: UITableViewController {
             profileCell.contentView.backgroundColor = UIColor.grayColor()
         }
         else if presentedRow == 2{
-           // orderCell.contentView.backgroundColor = UIColor.grayColor()
+            friendsCell.contentView.backgroundColor = UIColor.grayColor()
         }
         else if presentedRow == 3{
             //orderToTimeCell.contentView.backgroundColor = UIColor.grayColor()
         }
         else if presentedRow == 4{
+            //myOrdersCell.contentView.backgroundColor = UIColor.grayColor()
+        }
+        else if presentedRow == 5{
             //myOrdersCell.contentView.backgroundColor = UIColor.grayColor()
         }
     }
@@ -72,6 +79,9 @@ class MenuViewController: UITableViewController {
                // orderToTimeCell.contentView.backgroundColor = UIColor.whiteColor()
             }
             else if i == 4{
+                //myOrdersCell.contentView.backgroundColor = UIColor.whiteColor()
+            }
+            else if i == 5{
                 //myOrdersCell.contentView.backgroundColor = UIColor.whiteColor()
             }
         }
@@ -105,6 +115,9 @@ class MenuViewController: UITableViewController {
             }
                 //Show history view
             else if row == 4{
+                //newFrontViewController = self.storyboard?.instantiateViewControllerWithIdentifier("history") as! HistoryTableViewController
+            }
+            else if row == 5{
                 //newFrontViewController = self.storyboard?.instantiateViewControllerWithIdentifier("history") as! HistoryTableViewController
             }
             
