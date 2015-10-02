@@ -13,7 +13,8 @@ class RoomTableViewCell: UITableViewCell {
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var gameImageView: UIImageView!
-    @IBOutlet weak var somestuffImageView: UIImageView!
+    @IBOutlet weak var gameTypeImageView: UIImageView!
+
     
     @IBOutlet weak var yourScoreLabel: UILabel!
     @IBOutlet weak var opponentScoreLabel: UILabel!

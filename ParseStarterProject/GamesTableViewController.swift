@@ -10,6 +10,7 @@ import UIKit
 
 class GamesTableViewController: UITableViewController {
 
+    @IBOutlet weak var menuButton: UIBarButtonItem!
     let jsonParser = JSONParser.sharedInstance
     
     let defaults = NSUserDefaults.standardUserDefaults()
@@ -19,11 +20,19 @@ class GamesTableViewController: UITableViewController {
     let reachability = Reachability.reachabilityForInternetConnection()
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController!.navigationBar.barTintColor = Standart.purpleColor
         var backgroundView =  UIView(frame: CGRectZero)
-        self.tableView.backgroundColor = Standart.purpleColor
+        //self.tableView.backgroundColor = Standart.purpleColor
         self.tableView.tableFooterView = backgroundView
         reachability.whenUnreachable = { reachability in
             Reachability.showAlert(self)
+        }
+        
+        if self.revealViewController() != nil {
+            self.revealViewController().rightViewController = nil
+            menuButton.target = self.revealViewController()
+            menuButton.action = "revealToggle:"
+            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
     }
 

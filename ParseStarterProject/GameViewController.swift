@@ -30,12 +30,20 @@ class GameViewController: UIViewController {
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var commitButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var menuButton: UIBarButtonItem!
     
     var scene: GameScene!
     var gameBoard: GameBoard!
     var game: Game!
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController!.navigationBar.barTintColor = Standart.purpleColor
+        if self.revealViewController() != nil {
+            self.revealViewController().rightViewController = nil
+            menuButton.target = self.revealViewController()
+            menuButton.action = "revealToggle:"
+            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        }
         
         // Configure the view.
         let skView = view as! SKView

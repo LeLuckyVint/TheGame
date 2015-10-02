@@ -1,18 +1,18 @@
 //
-//  RoomsTableViewController.swift
-//  The Game
+//  RoomInvitesTableViewController.swift
+//  
 //
-//  Created by demo on 12.08.15.
-//  Copyright (c) 2015 Parse. All rights reserved.
+//  Created by demo on 02.10.15.
+//
 //
 
 import UIKit
 
-class RoomsTableViewController: UITableViewController {
+class RoomInvitesTableViewController: UITableViewController {
+
     let jsonParser = JSONParser.sharedInstance
     let defaults = NSUserDefaults.standardUserDefaults()
     
-    @IBOutlet weak var menuButton: UIBarButtonItem!
     var rooms = [Room]()
     var enteredRooms = [RoomInvite]()
     
@@ -26,17 +26,9 @@ class RoomsTableViewController: UITableViewController {
         reachability.whenUnreachable = { reachability in
             Reachability.showAlert(self)
         }
-        var backgroundView = UIView(frame: CGRectZero)
-        //self.tableView.backgroundColor = Standart.purpleColor
+        var backgroundView =  UIView(frame: CGRectZero)
+        self.tableView.backgroundColor = Standart.purpleColor
         self.tableView.tableFooterView = backgroundView
-        
-        if self.revealViewController() != nil {
-            self.revealViewController().rightViewController = nil
-            menuButton.target = self.revealViewController()
-            menuButton.action = "revealToggle:"
-            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        }
-        
         reachability.startNotifier()
         
         if reachability.isReachable(){
@@ -128,6 +120,7 @@ class RoomsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if reachability.isReachable(){
             //If tapped add new game button
+            
             if indexPath.section == 0{
                 let room = rooms[indexPath.row]
                 ServerCommunicator.getInfoAboutPuzzleGame(room.gameId){
@@ -138,7 +131,7 @@ class RoomsTableViewController: UITableViewController {
                     }
                 }
             }
-            //Tapped invite to room
+                //Tapped invite to room
             else{
                 
             }
@@ -148,35 +141,6 @@ class RoomsTableViewController: UITableViewController {
             Reachability.showAlert(self)
         }
     }
-    
-//    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-//        if indexPath.section == 1{
-//            let delete = UITableViewRowAction(style: .Normal, title: "X") { action, index in
-//                DataLoader.sharedInstance.declineResponse(self.responses[indexPath.row].requestId, driverId: self.responses[indexPath.row].driverId, coordinate: Map.sharedMap.currentLocation){
-//                    success, serverError in
-//                    if success{
-//                        self.responses.removeAtIndex(indexPath.row)
-//                        self.driversTableView.reloadData()
-//                    }
-//                }
-//            }
-//            let accept = UITableViewRowAction(style: .Normal, title: "V") { action, index in
-//                ServerCommunicator.acceptInviteToGame(roomId!){
-//                    success in
-//                    self.tableView.reloadData()
-//                }
-//            }
-//            
-//            delete.backgroundColor = UIColor.redColor()
-//            accept.backgroundColor = UIColor.cyanColor()
-//            return [accept, delete]
-//        }
-//        return nil
-//    }
-//    
-//    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-//        
-//    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destination = segue.destinationViewController as? GameViewController{

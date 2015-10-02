@@ -21,9 +21,7 @@ class MenuViewController: UITableViewController {
     @IBOutlet weak var invitesCell: MKTableViewCell!
     @IBOutlet weak var settingsCell: UITableViewCell!
     
-    @IBOutlet weak var orderLabel: UILabel!
-    
-    var presentedRow = 2
+    var presentedRow = 3
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,11 +37,10 @@ class MenuViewController: UITableViewController {
         //self.revealViewController().view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
     func update(){
-//        avatarImageView.image = userDefaultsLoader.avatar
-//        nameLabel.text = profile.name!
+        avatarImageView.image = User.currentUser?.avatar
+        nameLabel.text = User.currentUser?.username
     }
     override func viewWillAppear(animated: Bool) {
-        
         update()
 
         clearRowColors()
@@ -54,13 +51,13 @@ class MenuViewController: UITableViewController {
             friendsCell.contentView.backgroundColor = UIColor.grayColor()
         }
         else if presentedRow == 3{
-            //orderToTimeCell.contentView.backgroundColor = UIColor.grayColor()
+            gamesCell.contentView.backgroundColor = UIColor.grayColor()
         }
         else if presentedRow == 4{
-            //myOrdersCell.contentView.backgroundColor = UIColor.grayColor()
+            invitesCell.contentView.backgroundColor = UIColor.grayColor()
         }
         else if presentedRow == 5{
-            //myOrdersCell.contentView.backgroundColor = UIColor.grayColor()
+            settingsCell.contentView.backgroundColor = UIColor.grayColor()
         }
     }
     override func didReceiveMemoryWarning() {
@@ -73,16 +70,16 @@ class MenuViewController: UITableViewController {
                 profileCell.contentView.backgroundColor = UIColor.whiteColor()
             }
             else if i == 2{
-                //orderCell.contentView.backgroundColor = UIColor.whiteColor()
+                friendsCell.contentView.backgroundColor = UIColor.whiteColor()
             }
             else if i == 3{
-               // orderToTimeCell.contentView.backgroundColor = UIColor.whiteColor()
+                gamesCell.contentView.backgroundColor = UIColor.whiteColor()
             }
             else if i == 4{
-                //myOrdersCell.contentView.backgroundColor = UIColor.whiteColor()
+                invitesCell.contentView.backgroundColor = UIColor.whiteColor()
             }
             else if i == 5{
-                //myOrdersCell.contentView.backgroundColor = UIColor.whiteColor()
+                settingsCell.contentView.backgroundColor = UIColor.whiteColor()
             }
         }
     }
@@ -107,15 +104,15 @@ class MenuViewController: UITableViewController {
             }
                 //Show map view
             else if row == 2{
-
+                newFrontViewController = self.storyboard?.instantiateViewControllerWithIdentifier("friends") as! PlayersTableViewController
             }
                 //Show settings view
             else if row == 3{
-                //newFrontViewController = self.storyboard?.instantiateViewControllerWithIdentifier("settings") as! SettingsViewController
+                newFrontViewController = self.storyboard?.instantiateViewControllerWithIdentifier("roomsViewController") as! RoomsTableViewController
             }
                 //Show history view
             else if row == 4{
-                //newFrontViewController = self.storyboard?.instantiateViewControllerWithIdentifier("history") as! HistoryTableViewController
+                newFrontViewController = self.storyboard?.instantiateViewControllerWithIdentifier("invitesViewController") as! RoomInvitesTableViewController
             }
             else if row == 5{
                 //newFrontViewController = self.storyboard?.instantiateViewControllerWithIdentifier("history") as! HistoryTableViewController
