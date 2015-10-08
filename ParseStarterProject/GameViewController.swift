@@ -31,7 +31,15 @@ class GameViewController: UIViewController {
     @IBOutlet weak var commitButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var menuButton: UIBarButtonItem!
+    @IBOutlet weak var gameView: SKView!
     
+    @IBOutlet weak var yourScoreLabel: UILabel!
+    @IBOutlet weak var yourNameLabel: UILabel!
+    @IBOutlet weak var yourAvatarImageView: UIImageView!
+    @IBOutlet weak var opponentScoreLabel: UILabel!
+    @IBOutlet weak var opponentNameLabel: UILabel!
+    @IBOutlet weak var opponentAvatarImageView: UIImageView!
+    @IBOutlet weak var whosTurnLabel: UILabel!
     var scene: GameScene!
     var gameBoard: GameBoard!
     var game: Game!
@@ -44,17 +52,25 @@ class GameViewController: UIViewController {
             menuButton.action = "revealToggle:"
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
+        yourNameLabel.text = game.you.user.username
+        yourScoreLabel.text = "\(game.you.score)"
+        yourAvatarImageView.image = game.you.user.avatar
+        opponentNameLabel.text = game.opponent.user.username
+        opponentScoreLabel.text = "\(game.opponent.score)"
+        opponentAvatarImageView.image = game.opponent.user.avatar
+        cropAvatar(yourAvatarImageView)
+        cropAvatar(opponentAvatarImageView)
         
         // Configure the view.
-        let skView = view as! SKView
-        skView.multipleTouchEnabled = false
+        //let skView = view as! SKView
+        //skView.multipleTouchEnabled = false
         
         // Create and configure the scene.
-        scene = GameScene(size: skView.bounds.size)
-        scene.scaleMode = .AspectFill
+        scene = GameScene(size: gameView.bounds.size)
+        //scene.scaleMode = .AspectFit
         
         // Present the scene.
-        skView.presentScene(scene)
+        gameView.presentScene(scene)
         gameBoard = GameBoard()
         gameBoard.figuresArray = game.figures
         gameBoard.hand = game.hand
@@ -79,6 +95,15 @@ class GameViewController: UIViewController {
         //layoutForButton(skipButton)
         //layoutForButton(cancelButton)
         //layoutForButton(commitButton)
+    }
+    
+    func cropAvatar(avatarImageView: UIImageView){
+        avatarImageView.layer.borderWidth=1.0
+        avatarImageView.layer.masksToBounds = false
+        avatarImageView.layer.borderColor = UIColor.whiteColor().CGColor
+        avatarImageView.layer.cornerRadius = 13
+        avatarImageView.layer.cornerRadius = avatarImageView.frame.size.height/2
+        avatarImageView.clipsToBounds = true
     }
     
     func layoutForButton(button: UIButton){

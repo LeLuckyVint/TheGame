@@ -57,17 +57,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         //Check if there is a token in app
+        
+        return true
+    }
+    func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         let defaults = NSUserDefaults.standardUserDefaults()
-        if let token = defaults.stringForKey("token")
-        {
-            self.window?.rootViewController = storyboard.instantiateInitialViewController() as? UIViewController
+        if let token = defaults.objectForKey("token"){
+            ServerCommunicator.getProfile(){
+                success in
+                if success{
+                    self.window?.rootViewController = self.storyboard.instantiateInitialViewController() as? UIViewController
+                    
+                }
+                else{
+                    var vc = self.storyboard.instantiateViewControllerWithIdentifier("logInViewController") as! LoginViewController
+                    self.window?.rootViewController = vc
+                }
+            }
         }
-        else
-        {
-            var vc = storyboard.instantiateViewControllerWithIdentifier("logInViewController") as! LoginViewController
+        else{
+            var vc = self.storyboard.instantiateViewControllerWithIdentifier("logInViewController") as! LoginViewController
             self.window?.rootViewController = vc
         }
-        
         return true
     }
     

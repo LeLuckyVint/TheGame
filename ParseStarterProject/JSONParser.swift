@@ -12,46 +12,43 @@ import SwiftyJSON
 class JSONParser {
     static let sharedInstance = JSONParser()
     
-    func getRooms(json: JSON) -> (rooms: [Room], enteredInvites: [RoomInvite]){
+    func getRooms(json: JSON) -> [Room]{
         var rooms:[Room] = []
-        var invites: [RoomInvite] = []
         let roomsJSONArray = json.arrayValue
         for room in roomsJSONArray{
             let roomId = room["roomId"].int!
-            
-            let creator = room["creator"]
-            let creatorId = creator["id"].int!
-            let creatorUsername = creator["username"].string!
-            let creatorAvatar = creator["avatar"].object as? NSURL
-            let creatorEntity = User(id: creatorId, username: creatorUsername, avatar: creatorAvatar)
+            let gameId = room["gameId"].int!
+            let creatorId = room["creatorId"].int!
             let type = room["type"].string!.toGameType()
+            let currentPlayerId = room["currentPlayerId"].int!
+            let lastChange = room["lastChange"].string!
             
-            if let gameId = room["gameId"].int{
+            var players = room["players"].array!
+            var playersEntities:[Player] = []
+            
+            for player in players{
+                let score = player["score"].intValue
+                let skippedMoveNumber = player["skippedMoveNumber"].intValue
                 
-                var players = room["players"].array!
-                var playersEntities:[Player] = []
+                let user = player["user"]
+                let userId = user["id"].intValue
+                let userUsername = user["username"].stringValue
+                let userAvatar = user["avatar"].object as? NSURL
+                let userEntity = User(id: userId, username: userUsername, avatar: userAvatar)
                 
-                for player in players{
-                    let score = player["score"].intValue
-                    let skippedMoveNumber = player["skippedMoveNumber"].intValue
-                    
-                    let user = player["user"]
-                    let userId = user["id"].intValue
-                    let userUsername = user["username"].stringValue
-                    let userAvatar = user["avatar"].object as? NSURL
-                    let userEntity = User(id: userId, username: userUsername, avatar: userAvatar)
-                    
-                    let playerEntity = Player(user: userEntity, score: score, skippedMoveNumber: skippedMoveNumber)
-                    playersEntities.append(playerEntity)
-                }
-                    let roomEntity = Room(id: roomId, creator: creatorEntity, gameId: gameId, players: playersEntities, type: type)
-                    rooms.append(roomEntity)
+                let playerEntity = Player(user: userEntity, score: score, skippedMoveNumber: skippedMoveNumber)
+                playersEntities.append(playerEntity)
             }
-            else{
-                invites.append(RoomInvite(id: roomId, creator: creatorEntity, type: type))
-            }
+            
+            let lastTurn = room["lastTurn"]
+            let turnId = lastTurn["turnId"].int!
+            let playerId = lastTurn["playerId"].int!
+            let addedScore = lastTurn["addedScore"]
+            
+            let roomEntity = Room(id: roomId, creatorId: creatorId, gameId: gameId, players: playersEntities, type: type)
+            rooms.append(roomEntity)
         }
-        return (rooms: rooms, enteredInvites: invites)
+        return (rooms: rooms)
     }
     
     func getRoomInvites(json: JSON) -> [RoomInvite]{
@@ -71,7 +68,7 @@ class JSONParser {
             else{
                 avatarURL = NSURL(string: "http://cs623318.vk.me/v623318367/1eab5/rCiTafl2x_s.jpg")
             }
-            let type = inviteJSON["gameType"].stringValue
+            let type = inviteJSON["type"].stringValue
             let room = RoomInvite(id: roomId, creator: User(id: userId, username: username, avatar: avatarURL), type: GameType.getTypeFromString(type))
             invites.append(room)
         }
@@ -113,10 +110,6 @@ class JSONParser {
             figuressEntities[col, row] = fig
         }
         
-        for player in players{
-            
-        }
-        
         var handArray = json["hand"].arrayValue
         var hand: [Figure?] = []
         for handJson in handArray{
@@ -126,7 +119,7 @@ class JSONParser {
         }
         
         let currentPlayer = json["currentPlayer"].intValue
-        return Game(ended: ended, locked: locked, size: size, figures: figuressEntities, hand: hand, currentPlayerId: currentPlayer, gameId: gameId)
+        return Game(ended: ended, locked: locked, size: size, figures: figuressEntities, hand: hand, currentPlayerId: currentPlayer, gameId: gameId, players: playersEntities)
         
     }
     
@@ -172,13 +165,18 @@ class JSONParser {
         return invites
     }
     
-    func getCurrentUser(json: JSON) -> User{
-        let id = json["id"].int!
-        let username = json["username"].string!
-        let email = json["email"].string!
-        let avatar = json["avatar"].object as? NSURL
-        
-        return User(id: id, username: username, avatar: avatar,email: email)
+    func getCurrentUser(json: JSON) -> (user: User?, success: Bool){
+        if let code = json["code"].int{
+            return (nil, false)
+        }
+        else{
+            let id = json["id"].int!
+            let username = json["username"].string!
+            let email = json["email"].string!
+            let avatar = json["avatar"].object as? NSURL
+            
+            return (User(id: id, username: username, avatar: avatar,email: email), true)
+        }
     }
     
     func getUsersFromSearch(json: JSON) -> [User]{

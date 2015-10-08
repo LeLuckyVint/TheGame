@@ -10,15 +10,15 @@ import Foundation
 
 class Room {
     let id: Int
-    let creator: User
+    let creatorId: Int
     let gameId: Int
     
     var players: [Player]
     let type: GameType
     
-    init(id: Int, creator: User, gameId: Int, players: [Player], type: GameType){
+    init(id: Int, creatorId: Int, gameId: Int, players: [Player], type: GameType){
         self.id = id
-        self.creator = creator
+        self.creatorId = creatorId
         self.gameId = gameId
         self.players = players
         self.type = type

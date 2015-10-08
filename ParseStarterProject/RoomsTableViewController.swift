@@ -14,7 +14,7 @@ class RoomsTableViewController: UITableViewController {
     
     @IBOutlet weak var menuButton: UIBarButtonItem!
     var rooms = [Room]()
-    var enteredRooms = [RoomInvite]()
+    //var enteredRooms = [RoomInvite]()
     
     let games = [GameType.PUZZLE]
     var game: Game!
@@ -40,13 +40,14 @@ class RoomsTableViewController: UITableViewController {
         reachability.startNotifier()
         
         if reachability.isReachable(){
-            ServerCommunicator.getProfile()
+//            ServerCommunicator.getProfile(){
+//                success in
+//            }
             ServerCommunicator.getRooms(){
-                array, invitesArr, success in
+                array, success in
                 if success{
                     self.rooms = array!
                     self.tableView.reloadData()
-                    self.enteredRooms = invitesArr!
                     self.tableView?.reloadData()
                 }
             }
@@ -65,60 +66,33 @@ class RoomsTableViewController: UITableViewController {
     }
     
     // MARK: - Table view data source
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0{
-            return "Games"
-        }
-        else{
-            return "Pending Rooms"
-        }
-    }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0{
-            return rooms.count
-        }
-        else{
-            return enteredRooms.count
-        }
+        return rooms.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: UITableViewCell
-        if indexPath.section == 0{
-            var roomCell = tableView.dequeueReusableCellWithIdentifier("roomCell", forIndexPath: indexPath) as! RoomTableViewCell
-            // Configure the cell
-            let room = rooms[indexPath.row]
-            let opponent = Player.getOpponent(room.players)
-            let you = Player.getYourself(room.players)
-            
-            if let avatar = opponent.user.avatar{
-                roomCell.avatarImageView.image = avatar
-            }
-            else{
-                roomCell.avatarImageView.image = UIImage(named: "no_user")
-            }
-            roomCell.usernameLabel.text = opponent.user.username
-            roomCell.yourScoreLabel.text = "\(you.score) -"
-            roomCell.opponentScoreLabel.text = "\(opponent.score)"
-            
-            cell = roomCell
+        var roomCell = tableView.dequeueReusableCellWithIdentifier("roomCell", forIndexPath: indexPath) as! RoomTableViewCell
+        // Configure the cell
+        let room = rooms[indexPath.row]
+        let opponent = Player.getOpponent(room.players)
+        let you = Player.getYourself(room.players)
+        
+        if let avatar = opponent.user.avatar{
+            roomCell.avatarImageView.image = avatar
         }
         else{
-            var enteredRoomCell = tableView.dequeueReusableCellWithIdentifier("roomInviteCell", forIndexPath: indexPath) as! EnteredRoomTableViewCell
-            
-            let invite = enteredRooms[indexPath.row]
-            
-            enteredRoomCell.usernameLabel.text = invite.creator.username
-            enteredRoomCell.avatarImageView.image = UIImage(data: NSData(contentsOfURL: invite.creator.avatarURL!)!)
-            enteredRoomCell.roomId = invite.id
-            cell = enteredRoomCell
+            roomCell.avatarImageView.image = UIImage(named: "no_user")
         }
-        return cell
+        roomCell.usernameLabel.text = opponent.user.username
+        roomCell.yourScoreLabel.text = "\(you.score) -"
+        roomCell.opponentScoreLabel.text = "\(opponent.score)"
+        
+        return roomCell
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -128,19 +102,13 @@ class RoomsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if reachability.isReachable(){
             //If tapped add new game button
-            if indexPath.section == 0{
-                let room = rooms[indexPath.row]
-                ServerCommunicator.getInfoAboutPuzzleGame(room.gameId){
-                    success, game in
-                    if success{
-                        self.game = game!
-                        self.performSegueWithIdentifier("startGame", sender: nil)
-                    }
+            let room = rooms[indexPath.row]
+            ServerCommunicator.getInfoAboutPuzzleGame(room.gameId){
+                success, game in
+                if success{
+                    self.game = game!
+                    self.performSegueWithIdentifier("startGame", sender: nil)
                 }
-            }
-            //Tapped invite to room
-            else{
-                
             }
         }
             //If internet is OFF
@@ -149,34 +117,34 @@ class RoomsTableViewController: UITableViewController {
         }
     }
     
-//    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-//        if indexPath.section == 1{
-//            let delete = UITableViewRowAction(style: .Normal, title: "X") { action, index in
-//                DataLoader.sharedInstance.declineResponse(self.responses[indexPath.row].requestId, driverId: self.responses[indexPath.row].driverId, coordinate: Map.sharedMap.currentLocation){
-//                    success, serverError in
-//                    if success{
-//                        self.responses.removeAtIndex(indexPath.row)
-//                        self.driversTableView.reloadData()
-//                    }
-//                }
-//            }
-//            let accept = UITableViewRowAction(style: .Normal, title: "V") { action, index in
-//                ServerCommunicator.acceptInviteToGame(roomId!){
-//                    success in
-//                    self.tableView.reloadData()
-//                }
-//            }
-//            
-//            delete.backgroundColor = UIColor.redColor()
-//            accept.backgroundColor = UIColor.cyanColor()
-//            return [accept, delete]
-//        }
-//        return nil
-//    }
-//    
-//    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-//        
-//    }
+    //    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+    //        if indexPath.section == 1{
+    //            let delete = UITableViewRowAction(style: .Normal, title: "X") { action, index in
+    //                DataLoader.sharedInstance.declineResponse(self.responses[indexPath.row].requestId, driverId: self.responses[indexPath.row].driverId, coordinate: Map.sharedMap.currentLocation){
+    //                    success, serverError in
+    //                    if success{
+    //                        self.responses.removeAtIndex(indexPath.row)
+    //                        self.driversTableView.reloadData()
+    //                    }
+    //                }
+    //            }
+    //            let accept = UITableViewRowAction(style: .Normal, title: "V") { action, index in
+    //                ServerCommunicator.acceptInviteToGame(roomId!){
+    //                    success in
+    //                    self.tableView.reloadData()
+    //                }
+    //            }
+    //
+    //            delete.backgroundColor = UIColor.redColor()
+    //            accept.backgroundColor = UIColor.cyanColor()
+    //            return [accept, delete]
+    //        }
+    //        return nil
+    //    }
+    //
+    //    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    //
+    //    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let destination = segue.destinationViewController as? GameViewController{

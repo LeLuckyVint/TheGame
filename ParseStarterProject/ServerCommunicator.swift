@@ -34,6 +34,7 @@ class ServerCommunicator {
         Alamofire.request(.POST, url, parameters: parameters, encoding: .JSON, headers: headers)
             .responseJSON { request, response, json, _ in
                 if (response?.statusCode == 200){
+
                     let jsonObject = JSON(json!)
                     
                     let dateFormatter = NSDateFormatter()
@@ -78,7 +79,7 @@ class ServerCommunicator {
                 println(response?.statusCode)
         }
     }
-    static func getProfile(){
+    static func getProfile(completion: (Bool) -> Void){
         let token = defaults.stringForKey("token")!
         let profileURL = "https://www.play-like.me/API/rest/profile"
         let profileHeaders = [
@@ -88,12 +89,21 @@ class ServerCommunicator {
         Alamofire.request(.GET, profileURL, headers: profileHeaders).responseJSON {
             request, response, json, _ in
             //println(response?.statusCode)
-            User.currentUser = self.jsonParser.getCurrentUser(JSON(json!))
+            println(json)
+            let (user, success) = self.jsonParser.getCurrentUser(JSON(json!))
+            if success{
+                User.currentUser = user
+                completion(true)
+            }
+            else{
+                completion(false)
+            }
+            
         }
     }
     
     //ROOMS METHODS
-    static func getRooms(completionHandler: (rooms: [Room]?, invites: [RoomInvite]?, success: Bool)->Void){
+    static func getRooms(completionHandler: (rooms: [Room]?, success: Bool)->Void){
         let token = defaults.stringForKey("token")!
         let url = "https://www.play-like.me/API/rest/rooms"
         let headers = [
@@ -104,11 +114,11 @@ class ServerCommunicator {
         Alamofire.request(.GET, url, encoding: .JSON, headers: headers).responseJSON { request, response, json, _ in
             if (response?.statusCode == 200){
                 let jsonObject = JSON(json!)
-                let (rooms, invites) = self.jsonParser.getRooms(jsonObject)
-                completionHandler(rooms: rooms, invites: invites, success: true)
+                let rooms = self.jsonParser.getRooms(jsonObject)
+                completionHandler(rooms: rooms, success: true)
             }
             else {
-                completionHandler(rooms: nil, invites: nil, success: false)
+                completionHandler(rooms: nil, success: false)
             }
         }
     }
