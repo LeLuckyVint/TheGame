@@ -12,6 +12,7 @@ class InviteTableViewCell: UITableViewCell {
 
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var emailLabel: UILabel!
     var userId: Int!
     var tableView: UITableView!
     

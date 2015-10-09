@@ -9,7 +9,7 @@
         <!--Login View Controller-->
         <scene sceneID="6G5-kC-BhI">
             <objects>
-                <viewController storyboardIdentifier="logInViewController" id="wZn-2e-yAb" customClass="LoginViewController" customModule="The_Game" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginViewController" id="wZn-2e-yAb" customClass="LoginViewController" customModule="The_Game" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="kuG-UX-DVi"/>
                         <viewControllerLayoutGuide type="bottom" id="lkh-c0-zrm"/>
@@ -462,7 +462,7 @@
                                     <outlet property="yourScoreLabel" destination="y11-4b-oFN" id="tFb-VM-ZGO"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="roomInviteCell" rowHeight="100" id="doP-vA-nvM" customClass="RoomInviteTableViewCell" customModule="The_Game" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="roomInviteCell" rowHeight="100" id="doP-vA-nvM" customClass="EnteredRoomTableViewCell" customModule="The_Game" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="doP-vA-nvM" id="4dZ-xG-zhd">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -714,10 +714,13 @@
                                         <rect key="frame" x="400" y="0.0" width="200" height="50"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                        <state key="normal" image="krestik">
+                                        <state key="normal" image="obmenyat">
                                             <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="changeFigures:" destination="cCE-A1-j4E" eventType="touchUpInside" id="unJ-4e-7Wg"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S96-rh-Q0w">
                                         <rect key="frame" x="200" y="0.0" width="200" height="50"/>
@@ -972,7 +975,7 @@
                                     <outlet property="usernameLabel" destination="nbl-7x-1K0" id="Lvg-So-MZn"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inviteCell" rowHeight="100" id="oBt-uR-EFQ" customClass="PlayerTableViewCell" customModule="The_Game" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inviteCell" rowHeight="100" id="oBt-uR-EFQ" customClass="InviteTableViewCell" customModule="The_Game" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oBt-uR-EFQ" id="AZ2-ce-zxi">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -1060,7 +1063,7 @@
                                 <animations/>
                                 <connections>
                                     <outlet property="avatarImageView" destination="vdo-GP-vYT" id="dqg-rq-p8U"/>
-                                    <outlet property="emailLabel" destination="FiQ-oA-EtS" id="9PB-Pd-Pro"/>
+                                    <outlet property="emailLabel" destination="FiQ-oA-EtS" id="5qg-4p-dkF"/>
                                     <outlet property="usernameLabel" destination="vHS-dM-AID" id="Nkj-fw-6du"/>
                                 </connections>
                             </tableViewCell>
@@ -1467,7 +1470,7 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="roomInviteCell" rowHeight="100" id="ppW-Nh-Mrw" customClass="RoomInviteTableViewCell" customModule="The_Game" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="roomInviteCell" rowHeight="100" id="ppW-Nh-Mrw" customClass="EnteredRoomTableViewCell" customModule="The_Game" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ppW-Nh-Mrw" id="N0I-ur-od4">
                                     <autoresizingMask key="autoresizingMask"/>
@@ -1480,12 +1483,6 @@
                                                 <constraint firstAttribute="width" constant="33" id="GMh-s2-V80"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lhS-t9-gix">
-                                            <rect key="frame" x="106" y="64" width="42" height="24"/>
-                                            <animations/>
-                                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uI5-C2-xIv">
                                             <rect key="frame" x="8" y="22" width="55" height="55"/>
                                             <animations/>
@@ -1508,12 +1505,6 @@
                                                 </mask>
                                             </variation>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsg-hK-N94">
-                                            <rect key="frame" x="156" y="64" width="42" height="24"/>
-                                            <animations/>
-                                            <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="17"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lenta" translatesAutoresizingMaskIntoConstraints="NO" id="7S9-7B-f1W">
                                             <rect key="frame" x="540" y="0.0" width="60" height="60"/>
                                             <animations/>
@@ -1530,17 +1521,13 @@
                                         <constraint firstAttribute="bottomMargin" secondItem="hmd-xe-hDa" secondAttribute="bottom" id="F2p-y0-n21"/>
                                         <constraint firstItem="B7D-Ij-rv8" firstAttribute="trailing" secondItem="N0I-ur-od4" secondAttribute="trailingMargin" id="IyQ-ko-W2T"/>
                                         <constraint firstItem="B7D-Ij-rv8" firstAttribute="top" secondItem="uI5-C2-xIv" secondAttribute="top" id="LGN-tN-XKP"/>
-                                        <constraint firstItem="dsg-hK-N94" firstAttribute="leading" secondItem="lhS-t9-gix" secondAttribute="trailing" constant="8" id="Pau-Zx-yC4"/>
                                         <constraint firstAttribute="centerY" secondItem="uI5-C2-xIv" secondAttribute="centerY" id="PxX-2w-pGb"/>
                                         <constraint firstItem="B7D-Ij-rv8" firstAttribute="trailing" secondItem="N0I-ur-od4" secondAttribute="trailingMargin" id="Ts9-a9-QRh"/>
                                         <constraint firstItem="hmd-xe-hDa" firstAttribute="leading" secondItem="uI5-C2-xIv" secondAttribute="trailing" constant="2" id="Xo5-3E-u3j"/>
                                         <constraint firstAttribute="trailing" secondItem="7S9-7B-f1W" secondAttribute="trailing" id="c6i-Xb-pto"/>
                                         <constraint firstItem="B7D-Ij-rv8" firstAttribute="top" secondItem="uI5-C2-xIv" secondAttribute="bottom" constant="-122" id="f6k-Mn-oh2"/>
-                                        <constraint firstItem="lhS-t9-gix" firstAttribute="centerY" secondItem="dsg-hK-N94" secondAttribute="centerY" id="pbz-aK-X7V"/>
                                         <constraint firstItem="B7D-Ij-rv8" firstAttribute="top" secondItem="uI5-C2-xIv" secondAttribute="bottom" constant="-122" id="rC8-eQ-YZ2"/>
                                         <constraint firstItem="B7D-Ij-rv8" firstAttribute="leading" secondItem="N0I-ur-od4" secondAttribute="leadingMargin" id="s60-NC-U1k"/>
-                                        <constraint firstItem="lhS-t9-gix" firstAttribute="leading" secondItem="hmd-xe-hDa" secondAttribute="trailing" constant="8" id="s9W-Ah-zYz"/>
-                                        <constraint firstItem="hmd-xe-hDa" firstAttribute="centerY" secondItem="lhS-t9-gix" secondAttribute="centerY" constant="-1.5" id="sf0-W9-l13"/>
                                         <constraint firstItem="B7D-Ij-rv8" firstAttribute="leading" secondItem="uI5-C2-xIv" secondAttribute="trailing" constant="8" id="yUV-Xw-epJ"/>
                                         <constraint firstItem="B7D-Ij-rv8" firstAttribute="top" secondItem="uI5-C2-xIv" secondAttribute="bottom" constant="-122" id="zEc-vf-X5j"/>
                                         <constraint firstItem="7S9-7B-f1W" firstAttribute="top" secondItem="N0I-ur-od4" secondAttribute="top" id="zzT-HH-uwS"/>
@@ -1560,9 +1547,7 @@
                                 <connections>
                                     <outlet property="avatarImageView" destination="uI5-C2-xIv" id="fPj-fp-pR8"/>
                                     <outlet property="gameImageView" destination="hmd-xe-hDa" id="n7L-68-ulA"/>
-                                    <outlet property="opponentScoreLabel" destination="dsg-hK-N94" id="ihf-b7-2oE"/>
                                     <outlet property="usernameLabel" destination="B7D-Ij-rv8" id="wDR-xF-Y3A"/>
-                                    <outlet property="yourScoreLabel" destination="lhS-t9-gix" id="MGZ-Z8-VUG"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1623,11 +1608,11 @@
     </scenes>
     <resources>
         <image name="galochka" width="70" height="70"/>
-        <image name="krestik" width="70" height="70"/>
         <image name="lenta" width="120" height="120"/>
         <image name="logo" width="2000" height="2000"/>
         <image name="menu" width="22" height="22"/>
         <image name="no_user" width="200" height="200"/>
+        <image name="obmenyat" width="70" height="70"/>
         <image name="plus" width="512" height="512"/>
         <image name="plusBar" width="55" height="55"/>
         <image name="propustit" width="69" height="68"/>

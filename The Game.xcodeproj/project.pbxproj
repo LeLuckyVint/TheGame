@@ -27,6 +27,7 @@
 		B4355DD11B73868E008C0413 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4355DD01B73868D008C0413 /* Tile.swift */; };
 		B4486DCD1BBE7CC100381A96 /* PodFile in Resources */ = {isa = PBXBuildFile; fileRef = B4486DCC1BBE7CC100381A96 /* PodFile */; };
 		B4486DD91BBE970A00381A96 /* RoomInvitesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4486DD81BBE970A00381A96 /* RoomInvitesTableViewController.swift */; };
+		B45BD61F1BC80151002280FD /* Bonus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45BD61E1BC80151002280FD /* Bonus.swift */; };
 		B4B2C9051B8771DA00CF94AB /* InviteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B2C9041B8771DA00CF94AB /* InviteTableViewCell.swift */; };
 		B4B2C90D1B8793AC00CF94AB /* RoomInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B2C90C1B8793AC00CF94AB /* RoomInvite.swift */; };
 		B4B2C90F1B87970500CF94AB /* RoomInviteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B2C90E1B87970500CF94AB /* RoomInviteTableViewCell.swift */; };
@@ -197,6 +198,7 @@
 		B4355DD01B73868D008C0413 /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		B4486DCC1BBE7CC100381A96 /* PodFile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PodFile; sourceTree = "<group>"; };
 		B4486DD81BBE970A00381A96 /* RoomInvitesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomInvitesTableViewController.swift; sourceTree = "<group>"; };
+		B45BD61E1BC80151002280FD /* Bonus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bonus.swift; sourceTree = "<group>"; };
 		B4B2C9041B8771DA00CF94AB /* InviteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InviteTableViewCell.swift; sourceTree = "<group>"; };
 		B4B2C90C1B8793AC00CF94AB /* RoomInvite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomInvite.swift; sourceTree = "<group>"; };
 		B4B2C90E1B87970500CF94AB /* RoomInviteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomInviteTableViewCell.swift; sourceTree = "<group>"; };
@@ -362,6 +364,7 @@
 				B4B7F3631B6278E00091D3D0 /* Figure.swift */,
 				B4B7F3641B6278E00091D3D0 /* GameBoard.swift */,
 				B4355DD01B73868D008C0413 /* Tile.swift */,
+				B45BD61E1BC80151002280FD /* Bonus.swift */,
 				B4B7F3651B6278E00091D3D0 /* Hand.swift */,
 				B4B7F3661B6278E00091D3D0 /* Move.swift */,
 				B4B7F3671B6278E00091D3D0 /* Player.swift */,
@@ -637,6 +640,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4BA12861B7B93BD0075F84A /* RoomsTableViewController.swift in Sources */,
+				B45BD61F1BC80151002280FD /* Bonus.swift in Sources */,
 				B4B7F3551B6278430091D3D0 /* SignUpViewController.swift in Sources */,
 				D84CFD4D1B6E39F2005D9047 /* JSONParser.swift in Sources */,
 				B4BE92241B85ED78008D9A86 /* TextFieldDelegate.swift in Sources */,

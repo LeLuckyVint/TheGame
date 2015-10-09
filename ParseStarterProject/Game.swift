@@ -19,8 +19,9 @@ class Game{
     var gameId: Int
     var you: Player
     var opponent: Player
+    var bonuses: [Bonus]
     
-    init(ended: Bool, locked: Bool, size: Int, figures: Array2D<Figure>, hand: [Figure?], currentPlayerId: Int, gameId: Int, players: [Player]){
+    init(ended: Bool, locked: Bool, size: Int, figures: Array2D<Figure>, hand: [Figure?], currentPlayerId: Int, gameId: Int, players: [Player], bonuses: [Bonus]){
         //super.init(id: id, creator: creator, gameId: id, players: players, type: type)
         self.ended = ended
         self.locked = locked
@@ -31,5 +32,6 @@ class Game{
         self.gameId = gameId
         self.you = Player.getYourself(players)
         self.opponent = Player.getOpponent(players)
+        self.bonuses = bonuses
     }
 }

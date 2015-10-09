@@ -62,6 +62,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         let defaults = NSUserDefaults.standardUserDefaults()
+        var vc = self.storyboard.instantiateViewControllerWithIdentifier("loginViewController") as! LoginViewController
+        self.window?.rootViewController = vc
         if let token = defaults.objectForKey("token"){
             ServerCommunicator.getProfile(){
                 success in
@@ -69,15 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.window?.rootViewController = self.storyboard.instantiateInitialViewController() as? UIViewController
                     
                 }
-                else{
-                    var vc = self.storyboard.instantiateViewControllerWithIdentifier("logInViewController") as! LoginViewController
-                    self.window?.rootViewController = vc
-                }
             }
-        }
-        else{
-            var vc = self.storyboard.instantiateViewControllerWithIdentifier("logInViewController") as! LoginViewController
-            self.window?.rootViewController = vc
         }
         return true
     }

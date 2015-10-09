@@ -14,6 +14,7 @@ let handNumber = 7
 class GameBoard{
     var figuresArray = Array2D<Figure>(columns: colNumber, rows: rowNumber)
     var currentMoveFiguresArray = Array2D<Figure>(columns: colNumber, rows: rowNumber)
+    var changeArray: [Figure] = []
     
     private var tiles = Array2D<Tile>(columns: colNumber, rows: rowNumber)
     
@@ -57,14 +58,6 @@ class GameBoard{
                 tiles[column,row] = Tile()
             }
         }
-
-//        hand[0] = Figure(type: Type.CIRCLE, color: Color.RED)
-//        hand[1] = Figure(type: Type.CIRCLE, color: Color.BLUE)
-//        hand[2] = Figure(type: Type.CIRCLE, color: Color.BLUE)
-//        hand[3] = Figure(type: Type.CIRCLE, color: Color.BLUE)
-//        hand[4] = Figure(type: Type.CIRCLE, color: Color.BLUE)
-//        hand[5] = Figure(type: Type.CIRCLE, color: Color.BLUE)
-//        hand[6] = Figure(type: Type.CIRCLE, color: Color.ORANGE)
     }
     
     func clearCurrentMoveArray(){
@@ -101,6 +94,15 @@ class GameBoard{
                 }
             }
             i += 1
+        }
+    }
+    
+    func addFigureToHand(figure: Figure){
+        for i in 0..<handNumber{
+            if hand[i] == nil{
+                hand[i] = figure
+                break
+            }
         }
     }
     init(){

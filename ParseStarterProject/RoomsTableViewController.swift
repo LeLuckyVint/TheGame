@@ -26,6 +26,8 @@ class RoomsTableViewController: UITableViewController {
         reachability.whenUnreachable = { reachability in
             Reachability.showAlert(self)
         }
+        self.refreshControl?.addTarget(self, action: "handleRefresh:", forControlEvents: UIControlEvents.ValueChanged)
+        
         var backgroundView = UIView(frame: CGRectZero)
         //self.tableView.backgroundColor = Standart.purpleColor
         self.tableView.tableFooterView = backgroundView
@@ -48,7 +50,6 @@ class RoomsTableViewController: UITableViewController {
                 if success{
                     self.rooms = array!
                     self.tableView.reloadData()
-                    self.tableView?.reloadData()
                 }
             }
         }
@@ -63,6 +64,18 @@ class RoomsTableViewController: UITableViewController {
     
     @IBAction func newRoom(sender: UIBarButtonItem) {
         self.performSegueWithIdentifier("showGames", sender: self)
+    }
+    
+    func handleRefresh(refreshControl: UIRefreshControl) {
+        ServerCommunicator.getRooms(){
+            array, success in
+            if success{
+                self.rooms = array!
+                self.tableView.reloadData()
+                refreshControl.endRefreshing()
+            }
+        }
+
     }
     
     // MARK: - Table view data source

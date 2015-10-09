@@ -50,7 +50,7 @@ class GameViewController: UIViewController {
             self.revealViewController().rightViewController = nil
             menuButton.target = self.revealViewController()
             menuButton.action = "revealToggle:"
-            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+            //self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         yourNameLabel.text = game.you.user.username
         yourScoreLabel.text = "\(game.you.score)"
@@ -67,6 +67,7 @@ class GameViewController: UIViewController {
         
         // Create and configure the scene.
         scene = GameScene(size: gameView.bounds.size)
+        scene.game = game
         //scene.scaleMode = .AspectFit
         
         // Present the scene.
@@ -92,9 +93,6 @@ class GameViewController: UIViewController {
         
         cancelButton.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         cancelButton.setImage(UIImage(named: "krestik"), forState: UIControlState.Normal)
-        //layoutForButton(skipButton)
-        //layoutForButton(cancelButton)
-        //layoutForButton(commitButton)
     }
     
     func cropAvatar(avatarImageView: UIImageView){
@@ -143,34 +141,64 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func skipMove(sender: UIButton) {
-        ServerCommunicator.getInfoAboutPuzzleGame(game.gameId){
-            success, game in
-            self.game = game
-            if game?.currentPlayerId == User.currentUser?.id{
-                self.gameBoard.figuresArray = self.game.figures
-                self.gameBoard.hand = self.game.hand
-                
-                self.scene.redrawBoard()
-                self.scene.addSpritesForFigures(self.gameBoard.figuresArray)
-                self.scene.addFiguresForHand(self.gameBoard.hand)
-                self.scene.addTilesForHand()
-            }
+        if scene.changeMode{
+            
+        }
+        else{
+//            ServerCommunicator.getInfoAboutPuzzleGame(game.gameId){
+//                success, game in
+//                self.game = game
+//                if game?.currentPlayerId == User.currentUser?.id{
+//                    self.gameBoard.figuresArray = self.game.figures
+//                    self.gameBoard.hand = self.game.hand
+//                    
+//                    self.scene.redrawBoard()
+//                    self.scene.addSpritesForFigures(self.gameBoard.figuresArray)
+//                    self.scene.addFiguresForHand(self.gameBoard.hand)
+//                    self.scene.addTilesForHand()
+//                }
+//            }
         }
     }
     
     @IBAction func commitMove(sender: UIButton) {
-        if game?.currentPlayerId == User.currentUser?.id{
-            
-            //scene.commitMove()
-            ServerCommunicator.commitMove(gameBoard.currentMoveFiguresArray, gameId: game.gameId){
-                success in
-                if success{
-                    self.scene.commitMove()
-                    self.scene.clearHandLayer()
+        if scene.changeMode{
+            ServerCommunicator.changeFiguresInHand(scene.gameBoard.changeArray, gameId: scene.game.gameId)
+            scene.changeMode = false
+            scene.tilesLayer.hidden = false
+            scene.figuresLayer.hidden = false
+            scene.gameBoard.changeArray = []
+            scene.cancelChange()
+        }
+        else{
+            if game?.currentPlayerId == User.currentUser?.id{
+                ServerCommunicator.commitMove(gameBoard.currentMoveFiguresArray, gameId: game.gameId){
+                    success in
+                    if success{
+                        self.scene.commitMove()
+                        self.scene.clearHandLayer()
+                    }
                 }
             }
         }
     }
     
+    @IBAction func changeFigures(sender: UIButton) {
+        if scene.changeMode{
+            scene.changeMode = false
+            scene.tilesLayer.hidden = false
+            scene.figuresLayer.hidden = false
+            scene.gameBoard.changeArray = []
+            scene.cancelChange()
+        }
+        else{
+            scene.tilesLayer.hidden = true
+            scene.figuresLayer.hidden = true
+            scene.returnFiguresToHand()
+            scene.redrawHand()
+            scene.changeMode = true
+        }
+        
+    }
 }
 

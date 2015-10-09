@@ -41,9 +41,11 @@ class JSONParser {
             }
             
             let lastTurn = room["lastTurn"]
-            let turnId = lastTurn["turnId"].int!
-            let playerId = lastTurn["playerId"].int!
-            let addedScore = lastTurn["addedScore"]
+            if lastTurn != nil{
+                let turnId = lastTurn["turnId"].intValue
+                let playerId = lastTurn["playerId"].intValue
+                let addedScore = lastTurn["addedScore"].intValue
+            }
             
             let roomEntity = Room(id: roomId, creatorId: creatorId, gameId: gameId, players: playersEntities, type: type)
             rooms.append(roomEntity)
@@ -110,6 +112,14 @@ class JSONParser {
             figuressEntities[col, row] = fig
         }
         
+        let bonuses = json["bonuses"]
+        var bonusesEntities: [Bonus] = []
+        for bonus in bonuses{
+            let coord = bonus.0.toInt()
+            let type = bonus.1.int
+            bonusesEntities.append(Bonus(coordinate: coord!, type: type!))
+        }
+        
         var handArray = json["hand"].arrayValue
         var hand: [Figure?] = []
         for handJson in handArray{
@@ -119,7 +129,7 @@ class JSONParser {
         }
         
         let currentPlayer = json["currentPlayer"].intValue
-        return Game(ended: ended, locked: locked, size: size, figures: figuressEntities, hand: hand, currentPlayerId: currentPlayer, gameId: gameId, players: playersEntities)
+        return Game(ended: ended, locked: locked, size: size, figures: figuressEntities, hand: hand, currentPlayerId: currentPlayer, gameId: gameId, players: playersEntities, bonuses: bonusesEntities)
         
     }
     
@@ -190,6 +200,13 @@ class JSONParser {
             users.append(User(id: id, username: username, avatar: avatar,email: email))
         }
         return users
+    }
+    
+    func getHandFromChangeHand(json: JSON) -> [Figure]{
+        var hand: [Figure] = []
+        let handJson = json["hand"]
+        
+        return hand
     }
 }
 extension String{

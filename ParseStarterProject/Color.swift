@@ -16,14 +16,7 @@ public enum Color{
     case GREY
     
     public static var size = 6
-//    public static final var unicode: [String] = [
-//        "\u{001B}",
-//        "\u{001B}",
-//        "\u001B}",
-//    "\u001B[33m",
-//    "\u001B[32m",
-//    "\u001B[34m"
-//    ]
+
     public var string: String{
         if self == .RED{
             return "red"

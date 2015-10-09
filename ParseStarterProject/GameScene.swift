@@ -30,13 +30,18 @@ class GameScene: SKScene {
     var isFromGameBoard = false
     var isFromHand = false
     var startedPosition: CGPoint?
+    var positionOnHand: CGPoint?
+    var positionOnBoard: CGPoint?
     var movementEnable = false
+    var changeMode = false
+    
+    var game: Game!
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder) is not used in this app")
     }
     
     override init(size: CGSize) {
-
+        
         handTileSize = (size.width - 20)/CGFloat(handNumber)
         super.init(size: size)
         println(size)
@@ -47,12 +52,12 @@ class GameScene: SKScene {
         addChild(background)
         
         addChild(gameLayer)
-
+        
         TileWidth = (self.size.width - 10)/CGFloat(colNumber)
         TileHeight = (self.size.width - 10)/CGFloat(colNumber)
         let h = self.size.height - handTileSize
         let h2 = (h - TileHeight * CGFloat(colNumber))/2
-
+        
         let w = TileWidth * CGFloat(colNumber)
         let handWidth = handTileSize * CGFloat(handNumber)
         
@@ -77,10 +82,10 @@ class GameScene: SKScene {
         super.didSimulatePhysics()
     }
     
-//    func centerOnNode(node: SKNode){
-//        let posInScene = node.scene?.convertPoint(node.position, fromNode: node.parent!)
-//        node.parent?.position = CGPointMake(node.parent!.position.x - posInScene!.x, node.parent!.position.y - posInScene!.y)
-//    }
+    //    func centerOnNode(node: SKNode){
+    //        let posInScene = node.scene?.convertPoint(node.position, fromNode: node.parent!)
+    //        node.parent?.position = CGPointMake(node.parent!.position.x - posInScene!.x, node.parent!.position.y - posInScene!.y)
+    //    }
     func addSpritesForFigures(figures: Array2D<Figure>) {
         for row in 0..<rowNumber {
             for column in 0..<colNumber {
@@ -101,7 +106,29 @@ class GameScene: SKScene {
         for row in 0..<rowNumber {
             for column in 0..<colNumber {
                 if let tile = gameBoard.tileAtColumn(column, row: row) {
-                    let tileNode = SKSpriteNode(imageNamed: "Tile")
+                    var name: String = ""
+                    if row == Int(rowNumber/2) && column == Int(colNumber/2){
+                        name = "startTile"
+                    }
+                    else{
+                        var isBonus = false
+                        for bonus in game.bonuses{
+                            if row == bonus.row && column == bonus.col{
+                                if bonus.type == 2{
+                                    name = "2tile"
+                                }
+                                else{
+                                    name = "3tile"
+                                }
+                                isBonus = true
+                                break
+                            }
+                        }
+                        if !isBonus{
+                            name = "Tile"
+                        }
+                    }
+                    let tileNode = SKSpriteNode(imageNamed: name)
                     tileNode.name = "tile"
                     tileNode.anchorPoint = CGPointZero
                     tileNode.size = CGSize(width: TileWidth, height: TileHeight)
@@ -211,43 +238,69 @@ class GameScene: SKScene {
         if touchedNode is SKSpriteNode {
             if let name = touchedNode.name{
                 if touchedNode.name! == "figure" {
-                    let coordinate = coordinateForPointInGameBoard(gameboardLocation)
-                    if coordinate.isInGameBoard && isFigureFromCurrentMove(coordinate.column, row: coordinate.row){
-                        self.isFromGameBoard = true
-                        self.isFromHand = false
-                        movementEnable = true
-                        selectedNode = (touchedNode as! SKSpriteNode)
-                        selectedNode!.removeAllActions()
-                        
-                        startedPosition = selectedNode!.position
-                        let liftUp = SKAction.scaleTo(1.5, duration: 0.2)
-                        selectedNode!.runAction(liftUp, withKey: "pickup")
-                        //DO STUFF
+                    if !changeMode{
+                        let coordinate = coordinateForPointInGameBoard(gameboardLocation)
+                        if coordinate.isInGameBoard && isFigureFromCurrentMove(coordinate.column, row: coordinate.row){
+                            self.isFromGameBoard = true
+                            self.isFromHand = false
+                            movementEnable = true
+                            selectedNode = (touchedNode as! SKSpriteNode)
+                            selectedNode!.removeAllActions()
+                            positionOnBoard = gameboardLocation
+                            positionOnHand = nil
+                            startedPosition = selectedNode!.position
+                            let liftUp = SKAction.scaleTo(1.5, duration: 0.2)
+                            selectedNode!.runAction(liftUp, withKey: "pickup")
+                            //DO STUFF
+                            
+                        }
+                        else{
+                            let coordinateHand = columnForPointInHand(handLocation)
+                            if coordinateHand.isInHand{
+                                self.isFromHand = true
+                                self.isFromGameBoard = false
+                                movementEnable = true
+                                selectedNode = (touchedNode as! SKSpriteNode)
+                                selectedNode!.removeAllActions()
+                                positionOnBoard = nil
+                                positionOnHand = handLocation
+                                startedPosition = selectedNode!.position
+                                let liftUp = SKAction.scaleTo(1.5, duration: 0.2)
+                                selectedNode!.runAction(liftUp, withKey: "pickup")
+                                //DO STUFF
+                            }
+                        }
                         
                     }
                     else{
                         let coordinateHand = columnForPointInHand(handLocation)
                         if coordinateHand.isInHand{
-                            self.isFromHand = true
-                            self.isFromGameBoard = false
-                            movementEnable = true
                             selectedNode = (touchedNode as! SKSpriteNode)
-                            selectedNode!.removeAllActions()
+                            let figureToRemovePosition = columnForPointInHand(handLocation)
+                            let figure = gameBoard.hand[figureToRemovePosition.column]
                             
-                            startedPosition = selectedNode!.position
-                            let liftUp = SKAction.scaleTo(1.5, duration: 0.2)
-                            selectedNode!.runAction(liftUp, withKey: "pickup")
-                            //DO STUFF
+                            if selectedNode?.alpha == 1{
+                                selectedNode?.alpha = 0.5
+                                gameBoard.changeArray.append(figure!)
+                            }
+                            else if selectedNode?.alpha == 0.5{
+                                selectedNode?.alpha = 1
+                                for i in 0..<gameBoard.changeArray.count{
+                                    if gameBoard.changeArray[i] == figure{
+                                        gameBoard.changeArray.removeAtIndex(i)
+                                    }
+                                }
+                            }
+                            selectedNode!.removeAllActions()
                         }
                     }
-                    
                 }
             }
         }
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if movementEnable{
+        if movementEnable && !changeMode{
             for touch in touches {
                 let touch = touch as! UITouch
                 
@@ -257,18 +310,20 @@ class GameScene: SKScene {
                 if coordinate.isInGameBoard{
                     //PLACE IS EMPTY
                     if isPlaceAtGameBoardEmpty(coordinate.column, row: coordinate.row){
+                        //selectedNode!.size = CGSize(width: TileWidth, height: TileHeight)
                         //Figure from gameboard
                         if isFromGameBoard{
-                            let figureToRemovePosition = coordinateForPointInGameBoard(startedPosition!)
+                            let figureToRemovePosition = coordinateForPointInGameBoard(positionOnBoard!)
                             selectedFigure = gameBoard.currentMoveFiguresArray[figureToRemovePosition.column, figureToRemovePosition.row]
                             gameBoard.currentMoveFiguresArray[coordinate.column, coordinate.row] = selectedFigure
                             gameBoard.currentMoveFiguresArray[figureToRemovePosition.column, figureToRemovePosition.row] = nil
                         }
                             //figure from hand
                         else{
-                            let figureToRemovePosition = columnForPointInHand(startedPosition!)
-                            selectedFigure = gameBoard.hand[figureToRemovePosition.column]
+                            let figureToRemovePosition = columnForPointInHand(positionOnHand!)
                             
+                            selectedFigure = gameBoard.hand[figureToRemovePosition.column]
+                            println(selectedFigure!.toString)
                             gameBoard.currentMoveFiguresArray[coordinate.column, coordinate.row] = selectedFigure
                             gameBoard.hand[figureToRemovePosition.column] = nil
                         }
@@ -286,8 +341,9 @@ class GameScene: SKScene {
                     //DROP ON HAND LAYER
                     if coordinateInHand.isInHand{
                         if isPlaceAtHandEmpty(coordinateInHand.column){
+                            //selectedNode!.size = CGSize(width: handTileSize, height: handTileSize)
                             if isFromHand{
-                                let figureToRemovePosition = columnForPointInHand(startedPosition!)
+                                let figureToRemovePosition = columnForPointInHand(positionOnHand!)
                                 selectedFigure = gameBoard.hand[figureToRemovePosition.column]
                                 gameBoard.hand[coordinateInHand.column] = selectedFigure
                                 gameBoard.hand[figureToRemovePosition.column] = nil
@@ -297,7 +353,7 @@ class GameScene: SKScene {
                                 selectedNode!.position = pointForHand(coordinateInHand.column)
                             }
                             else if isFromGameBoard{
-                                let figureToRemovePosition = coordinateForPointInGameBoard(startedPosition!)
+                                let figureToRemovePosition = coordinateForPointInGameBoard(positionOnBoard!)
                                 selectedFigure = gameBoard.currentMoveFiguresArray[figureToRemovePosition.column, figureToRemovePosition.row]
                                 gameBoard.hand[coordinateInHand.column] = selectedFigure
                                 gameBoard.currentMoveFiguresArray[figureToRemovePosition.column, figureToRemovePosition.row] = nil
@@ -324,10 +380,12 @@ class GameScene: SKScene {
                 movementEnable = false
             }
         }
+        selectedNode = nil
+        movementEnable = false
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if movementEnable{
+        if movementEnable && !changeMode{
             for touch in touches {
                 let touch = touch as! UITouch
                 let positionInScene = touch.locationInNode(self)
@@ -369,6 +427,12 @@ class GameScene: SKScene {
         figuresLayer.removeAllChildren()
         handLayer.removeAllChildren()
     }
+    
+    func redrawHand(){
+        handLayer.removeAllChildren()
+        addTilesForHand()
+        addFiguresForHand(gameBoard.hand)
+    }
     func clearHandLayer(){
         handLayer.removeAllChildren()
     }
@@ -380,6 +444,19 @@ class GameScene: SKScene {
         addSpritesForFigures(gameBoard.figuresArray)
         //gameBoard.moveHandFiguresToRight()
         // gameBoard.takeFiguresToHand()
+    }
+    
+    func returnFiguresToHand(){
+        gameBoard.moveHandFiguresToRight()
+        for i in 0..<gameBoard.currentMoveFiguresArray.rows{
+            for j in 0..<gameBoard.currentMoveFiguresArray.columns{
+                let figure = gameBoard.currentMoveFiguresArray[j, i]
+                if figure != nil{
+                    gameBoard.addFigureToHand(figure!)
+                    gameBoard.currentMoveFiguresArray[j, i] = nil
+                }
+            }
+        }
     }
     
     func addFiguresToGeneralArray(){
@@ -394,26 +471,33 @@ class GameScene: SKScene {
         gameBoard.clearCurrentMoveArray()
     }
     
-    override func didMoveToView(view: SKView) {
-//        let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: "handleZoomFrom:")
-//        self.view?.addGestureRecognizer(pinchGestureRecognizer)
+    func cancelChange(){
+        for i in handLayer.children{
+            let node = i as! SKSpriteNode
+            node.alpha = 1
+        }
     }
     
-//    func handleZoomFrom(recognizer: UIPinchGestureRecognizer){
-//        var anchorPoint = recognizer.locationInView(recognizer.view)
-//        anchorPoint = self.convertPointFromView(anchorPoint)
-//        if recognizer.state == UIGestureRecognizerState.Changed{
-//            var anchorPointInMySKNode = gameLayer.convertPoint(anchorPoint, fromNode: self)
-//            if gameLayer.xScale <= 3.0{
-//                gameLayer.setScale(gameLayer.xScale * recognizer.scale)
-//                gameLayer.calculateAccumulatedFrame()
-//                var mySKNodeAnchorPointInScene = self.convertPoint(anchorPointInMySKNode, fromNode: gameLayer)
-//                var translationOfAnchorInScene = CGPointSubtract(anchorPoint, point2: mySKNodeAnchorPointInScene)
-//                //gameLayer.position = CGPointAdd(gameLayer.position, point2: translationOfAnchorInScene)
-//            }
-//            recognizer.scale = 1
-//        }
-//    }
+    override func didMoveToView(view: SKView) {
+        //        let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: "handleZoomFrom:")
+        //        self.view?.addGestureRecognizer(pinchGestureRecognizer)
+    }
+    
+    //    func handleZoomFrom(recognizer: UIPinchGestureRecognizer){
+    //        var anchorPoint = recognizer.locationInView(recognizer.view)
+    //        anchorPoint = self.convertPointFromView(anchorPoint)
+    //        if recognizer.state == UIGestureRecognizerState.Changed{
+    //            var anchorPointInMySKNode = gameLayer.convertPoint(anchorPoint, fromNode: self)
+    //            if gameLayer.xScale <= 3.0{
+    //                gameLayer.setScale(gameLayer.xScale * recognizer.scale)
+    //                gameLayer.calculateAccumulatedFrame()
+    //                var mySKNodeAnchorPointInScene = self.convertPoint(anchorPointInMySKNode, fromNode: gameLayer)
+    //                var translationOfAnchorInScene = CGPointSubtract(anchorPoint, point2: mySKNodeAnchorPointInScene)
+    //                //gameLayer.position = CGPointAdd(gameLayer.position, point2: translationOfAnchorInScene)
+    //            }
+    //            recognizer.scale = 1
+    //        }
+    //    }
     
     func CGPointSubtract(point1: CGPoint, point2: CGPoint) -> CGPoint{
         return CGPointMake(point1.x - point2.x, point1.y - point2.y);

@@ -110,11 +110,18 @@ class PlayersTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 0{
-            
-        }
-        else{
-            
+        if typeOfGame != nil{
+            if indexPath.section == 1{
+                let player = friends[indexPath.row]
+                ServerCommunicator.createRoom(player.id, type: typeOfGame.getStringForJSON()){
+                    success in
+                    if success{
+                        let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("roomsViewController") as! RoomsTableViewController
+                        let navController = UINavigationController(rootViewController: newViewController)
+                        self.presentViewController(navController, animated: true, completion: nil)
+                    }
+                }
+            }
         }
     }
 }
